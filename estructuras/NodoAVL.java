@@ -2,30 +2,44 @@ package estructuras;
 
 public class NodoAVL {
 
-    private Comparable elemento;
+	// La clave se utiliza para buscar
+    private Comparable clave;
+    // El objeto tiene el resto de los atributos
+    private Object objeto;
     private NodoAVL izquierdo;
     private NodoAVL derecho;
     private int altura;
-
-    public NodoAVL(Comparable elemento){
-        this.elemento = elemento;
+    
+    // Constructores
+    public NodoAVL(Comparable clave, Object objeto){
+        this.clave = clave;
+        this.objeto = objeto;
         this.izquierdo = null;
         this.derecho = null;
     }
     
-    public NodoAVL(Comparable elemento, NodoAVL izq, NodoAVL der) {
-        this.elemento = elemento;
+    public NodoAVL(Comparable clave, Object objeto, NodoAVL izq, NodoAVL der) {
+        this.clave = clave;
+        this.objeto = objeto;
         this.izquierdo = izq;
         this.derecho = der;
         this.altura = 0;
     }
-
-    public void setElem(Comparable elemento) {
-        this.elemento = elemento;
+    
+    public Comparable getClave() {
+        return this.clave;
+    }
+    
+    public void setClave(Comparable claveNueva) {
+    	this.clave = claveNueva;
     }
 
-    public Comparable getElem() {
-        return this.elemento;
+    public Object getObjeto() {
+    	return this.objeto;
+    }
+    
+    public void setObjeto(Object objetoNuevo) {
+    	this.objeto = objetoNuevo;
     }
 
     public int getAltura() {

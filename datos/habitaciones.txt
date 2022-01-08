@@ -1,0 +1,3 @@
+H;1;Comedor;0;20;false
+H;2;Cocina;0;15;true
+H;5;Sótano;-1;30;false

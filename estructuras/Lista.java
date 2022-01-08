@@ -17,7 +17,7 @@ public class Lista {
             if (posicion == 1) {
                 this.cabecera = new Nodo(elemento, this.cabecera);
             } else {
-                Nodo auxiliar = this.cabecera;
+            	Nodo auxiliar = this.cabecera;
                 int iteracion = 1;
                 while (iteracion < posicion - 1) {
                     auxiliar = auxiliar.getEnlace();
@@ -36,7 +36,7 @@ public class Lista {
         boolean exito = false;
 
         if (1 <= posicion && posicion <= this.longitud()) {
-            Nodo auxiliar = this.cabecera;
+        	Nodo auxiliar = this.cabecera;
             int iteracion = 1;
             if (posicion == 1) {
                 this.cabecera = this.cabecera.getEnlace();
@@ -116,7 +116,7 @@ public class Lista {
     public Lista clone() {
         Lista clon = new Lista();
         Nodo nodoAdelante = this.cabecera;
-        clon.cabecera = new Nodo(nodoAdelante.getElemento(), null);
+        clon.cabecera = new Nodo(nodoAdelante.getElemento(),  null);
         nodoAdelante = nodoAdelante.getEnlace();
         Nodo nodoAtras = clon.cabecera;
 
@@ -136,11 +136,11 @@ public class Lista {
         if (this.esVacia()) {
             texto = "Lista vacia";
         } else {
-            Nodo nodoAuxiliar = this.cabecera;
+        	Nodo nodoAuxiliar = this.cabecera;
             texto = "";
 
             while (nodoAuxiliar != null) {
-                texto += nodoAuxiliar.getElemento();
+                texto += nodoAuxiliar.getElemento().toString();
                 nodoAuxiliar = nodoAuxiliar.getEnlace();
                 if (nodoAuxiliar != null) {
                     texto += ",";

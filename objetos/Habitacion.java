@@ -5,7 +5,7 @@ public class Habitacion {
     // Atributos
     private final int codigo;
     private String nombre;
-    private byte planta;
+    private int planta;
     private int metrosCuadrados;
     private boolean salidaExterior;
 
@@ -14,8 +14,12 @@ public class Habitacion {
         this.codigo = codigo;
     }
 
-    public Habitacion(int codigo, String nombre, byte planta, int metrosCuadrados, boolean salidaExterior) {
+    public Habitacion(int codigo, String nombre, int planta, int metrosCuadrados, boolean salidaExterior) {
         this.codigo = codigo;
+        this.nombre = nombre;
+        this.planta = planta;
+        this.metrosCuadrados = metrosCuadrados;
+        this.salidaExterior = salidaExterior;
     }
 
     // Observadores
@@ -27,7 +31,7 @@ public class Habitacion {
         return this.nombre;
     }
 
-    public byte getPlanta() {
+    public int getPlanta() {
         return this.planta;
     }
 
@@ -54,6 +58,17 @@ public class Habitacion {
 
     public void setSalidaExterior(boolean salidaExterior) {
         this.salidaExterior = salidaExterior;
+    }
+    
+    // Propias de tipo
+    @Override
+    public String toString() {
+    	return "Codigo: " + this.codigo +
+    			"\nNombre: " + this.nombre +
+    			"\nPlanta: " + this.planta +
+    			"\nMetros cuadrados: " + this.metrosCuadrados +
+    			"\nTiene salida al exterior: " + this.salidaExterior;
+    			
     }
 
 }

@@ -1,0 +1,2 @@
+E;Los Valientes;400;130;4;0
+E;Los Locos Adams;400;50;2;10

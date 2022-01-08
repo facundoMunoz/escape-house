@@ -13,7 +13,7 @@ public class Nodo {
         
     }
     
-    // Modificadores
+    // Observadores
     public Object getElemento() {
 
         return this.elemento;
@@ -26,7 +26,7 @@ public class Nodo {
 
     }
 
-    // Observadores
+    // Modificadores
     public void setElemento(Object nuevoElemento) {
 
         this.elemento = nuevoElemento;

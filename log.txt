@@ -1,14 +1,34 @@
 
-Ingreso al sistema Escape House 08-01-2022 18:21:09
+Ingreso al sistema Escape House 10-01-2022 21:54:18
 Carga de habitaciones
 Se crea la habitación 1
 Se crea la habitación 2
+Se crea la habitación 3
+Se crea la habitación 4
 Se crea la habitación 5
+Se crea la habitación 6
+Se crea la habitación 7
+Se crea la habitación 8
+Se crea la habitación 9
+Se crea la habitación 10
+Se crea la habitación 11
+Se crea la habitación 12
+Se crea la habitación 13
+Se crea la habitación 14
+Se crea la habitación 15
+Se crea la habitación 16
+Se crea la habitación 17
+Se crea la habitación 18
+Se crea la habitación 19
+Se crea la habitación 20
+Se crea la habitación 21
 Carga de desafíos
 Se crea el desafío 30
 Se crea el desafío 50
 Se crea el desafío 65
 Carga de equipos
-(Fallo carga) Habitación no existe para equipo Los Valientes
+Se crea el equipo Los Valientes
 Se crea el equipo Los Locos Adams
-Salida del sistema Escape House 08-01-2022 18:22:39
+Carga del mapa
+Se crea la puerta de 1 a 2
+Se crea la puerta de 2 a 3

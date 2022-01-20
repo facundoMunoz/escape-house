@@ -1,7 +1,5 @@
 package estructuras;
 
-import java.util.HashMap;
-
 public class Grafo {
 	// Grafo etiquetado implementado para funcionar como mapa de la casona
 	private NodoVert inicio;
@@ -200,22 +198,22 @@ public class Grafo {
 		return exito;
 	}
 
-	private boolean existeCaminoAux(NodoVert n, Object dest, Lista vis) {
+	private boolean existeCaminoAux(NodoVert actual, Object dest, Lista visitados) {
 		boolean exito = false;
 
-		if (n != null) {
+		if (actual != null) {
 			// Camino encontrado
-			if (n.getElem().equals(dest)) {
+			if (actual.getElem().equals(dest)) {
 				exito = true;
 			} else {
 				// Si no es el destino verifica entre n y el destino
 				// Marcamos n como visitado
-				vis.insertar(n.getElem(), vis.longitud() + 1);
-				NodoAdy ady = n.getPrimerAdy();
+				visitados.insertar(actual.getElem(), visitados.longitud() + 1);
+				NodoAdy ady = actual.getPrimerAdy();
 				while (!exito && ady != null) {
 					// Verifica que no esté visitado
-					if (vis.localizar(ady.getVertice().getElem()) < 0) {
-						exito = existeCaminoAux(ady.getVertice(), dest, vis);
+					if (visitados.localizar(ady.getVertice().getElem()) < 0) {
+						exito = existeCaminoAux(ady.getVertice(), dest, visitados);
 					}
 					ady = ady.getSigAdyacente();
 				}
@@ -258,11 +256,11 @@ public class Grafo {
 
 	public Lista listarAnchura() {
 		Lista listados = new Lista();
-		HashMap<String, Object> visitados = new HashMap<String, Object>();
+		TablaHash visitados = new TablaHash();
 		NodoVert nodo = this.inicio;
 
 		while (nodo != null) {
-			if (visitados.get(nodo.getElem().toString()) == null) {
+			if (visitados.getObjeto(nodo.getElem().toString()) == null) {
 				this.listarAnchuraAux(nodo, listados, visitados);
 			}
 			nodo = nodo.getSigVertice();
@@ -271,9 +269,9 @@ public class Grafo {
 		return listados;
 	}
 
-	private void listarAnchuraAux(NodoVert nodo, Lista listados, HashMap<String, Object> visitados) {
+	private void listarAnchuraAux(NodoVert nodo, Lista listados, TablaHash visitados) {
 		Cola colaAux = new Cola();
-		visitados.put(nodo.getElem().toString(), inicio);
+		visitados.insertar(nodo.getElem().toString(), inicio);
 		colaAux.poner(nodo);
 
 		while (!colaAux.esVacia()) {
@@ -283,9 +281,9 @@ public class Grafo {
 			NodoAdy adyacente = nodoAux.getPrimerAdy();
 
 			while (adyacente != null) {
-				if (visitados.get(adyacente.getVertice().getElem().toString()) == null) {
+				if (visitados.getObjeto(adyacente.getVertice().getElem().toString()) == null) {
 					colaAux.poner(adyacente.getVertice());
-					visitados.put(adyacente.getVertice().getElem().toString(), adyacente.getVertice());
+					visitados.insertar(adyacente.getVertice().getElem().toString(), adyacente.getVertice());
 				}
 				adyacente = adyacente.getSigAdyacente();
 			}
@@ -294,7 +292,7 @@ public class Grafo {
 
 	public Lista caminoMasCorto(Object origen, Object destino) {
 		Lista camino = new Lista();
-		HashMap<String, Object> visitados = new HashMap<String, Object>();
+		TablaHash visitados = new TablaHash();
 		// Verifica si ambos vertices existen
 		NodoVert auxO = null;
 		NodoVert auxD = null;
@@ -318,10 +316,10 @@ public class Grafo {
 		return camino;
 	}
 
-	private Lista caminoMasCortoAux(NodoVert origen, NodoVert destino, HashMap<String, Object> visitados) {
+	private Lista caminoMasCortoAux(NodoVert origen, NodoVert destino, TablaHash visitados) {
 		Lista camino = new Lista();
 		// El primer recorrido es el origen
-		visitados.put(origen.getElem().toString(), origen);
+		visitados.insertar(origen.getElem().toString(), origen);
 		if (origen.equals(destino)) {
 			camino.insertar(origen.getElem(), 1);
 		} else {
@@ -329,7 +327,8 @@ public class Grafo {
 			Lista caminoPosible = new Lista();
 
 			while (adyacente != null) {
-				if (visitados.get(adyacente.getVertice().getElem().toString()) == null && camino.longitud() == 0) {
+				if (visitados.getObjeto(adyacente.getVertice().getElem().toString()) == null
+						&& camino.longitud() == 0) {
 					if (camino.longitud() == 0) {
 						camino = this.caminoMasCortoAux(adyacente.getVertice(), destino, visitados);
 					} else {
@@ -347,20 +346,29 @@ public class Grafo {
 		return camino;
 	}
 
-	public Lista listarAdyacentes(Object buscado) {
+	public Lista listarAdyacentesYEtiquetas(Object buscado) {
+		// Método que genera lista de los adyacentes y las etiquetas que lo conectan al
+		// buscado
+		// En orden 'objeto -> etiqueta -> objeto -> etiqueta -> ...'
 		NodoVert nodo = ubicarVertice(buscado);
 		Lista adyacentes = new Lista();
 
 		if (nodo != null) {
 			NodoAdy adyacente = nodo.getPrimerAdy();
+			int posicionLista = 1;
+
 			do {
-				adyacentes.insertar(adyacente.getVertice().getElem(), adyacentes.longitud() + 1);
+				// Agregamos el elemento y luego la etiqueta del arco
+				adyacentes.insertar(adyacente.getVertice().getElem(), posicionLista);
+				posicionLista++;
+				adyacentes.insertar(adyacente.getEtiqueta(), posicionLista);
+				posicionLista++;
 			} while ((adyacente = adyacente.getSigAdyacente()) != null);
 		}
 
 		return adyacentes;
 	}
-	
+
 	public Object etiquetaArco(Object vertice, Object adyacente) {
 		// Recorrido con fuerza bruta de los adyacentes de un vértice
 		// Vértice inicial
@@ -376,11 +384,187 @@ public class Grafo {
 			}
 		}
 
-		if(nodoAdyacente != null) {
+		if (nodoAdyacente != null) {
 			etiqueta = nodoAdyacente.getEtiqueta();
 		}
-		
+
 		return etiqueta;
+	}
+
+	public boolean existeCaminoPuntajeMaximo(Object origen, Object destino, int puntos) {
+		boolean exito = false;
+		// Verifica si ambos vertices existen
+		NodoVert auxO = null;
+		NodoVert auxD = null;
+		NodoVert aux = this.inicio;
+
+		while ((auxO == null || auxD == null) && aux != null) {
+			if (aux.getElem().equals(origen)) {
+				auxO = aux;
+			}
+			if (aux.getElem().equals(destino)) {
+				auxD = aux;
+			}
+			aux = aux.getSigVertice();
+		}
+
+		if (auxO != null && auxD != null) {
+			// Si existen buscamos un camino entre ambos
+			Lista visitados = new Lista();
+			exito = existeCaminoPuntajeMaximoAux(auxO, destino, 0, puntos, visitados);
+		}
+
+		return exito;
+	}
+
+	private boolean existeCaminoPuntajeMaximoAux(NodoVert actual, Object dest, int puntosActuales, int puntosMaximos,
+			Lista visitados) {
+		// Precondición: puntosActuales comienza en 0
+		boolean exito = false;
+
+		if (actual != null) {
+			// Camino encontrado
+			if (actual.getElem().equals(dest)) {
+				exito = true;
+			} else {
+				// Si no es el destino verifica entre n y el destino
+				// Marcamos n como visitado
+				visitados.insertar(actual.getElem(), visitados.longitud() + 1);
+				NodoAdy ady = actual.getPrimerAdy();
+				while (!exito && ady != null) {
+					// Sumamos el puntaje del arco para limitar
+					puntosActuales += ady.getEtiqueta();
+					// Verifica que no esté visitado
+					if (visitados.localizar(ady.getVertice().getElem()) < 0 && puntosActuales <= puntosMaximos) {
+						exito = existeCaminoPuntajeMaximoAux(ady.getVertice(), dest, puntosActuales, puntosMaximos,
+								visitados);
+					}
+					ady = ady.getSigAdyacente();
+				}
+			}
+		}
+
+		return exito;
+	}
+
+	public Lista minimoPuntajeParaPasar(Object origen, Object destino) {
+		// Retorna el camino y mínimo puntaje para ir de origen a destino en una lista
+		// O null si no lo encuentra
+		Lista caminoMenosPuntos = new Lista();
+		// Verifica si ambos vertices existen
+		NodoVert auxO = null;
+		NodoVert auxD = null;
+		NodoVert aux = this.inicio;
+
+		while ((auxO == null || auxD == null) && aux != null) {
+			if (aux.getElem().equals(origen)) {
+				auxO = aux;
+			}
+			if (aux.getElem().equals(destino)) {
+				auxD = aux;
+			}
+			aux = aux.getSigVertice();
+		}
+
+		if (auxO != null && auxD != null) {
+			// Si existen buscamos un camino entre ambos
+			Lista visitados = new Lista();
+			minimoPuntajeParaPasarAux(auxO, destino, 0, visitados, caminoMenosPuntos);
+		}
+
+		return caminoMenosPuntos;
+	}
+
+	private void minimoPuntajeParaPasarAux(NodoVert actual, Object dest, int puntosActuales, Lista visitados,
+			Lista caminoMenosPuntos) {
+		// Precondición: puntosActuales comienza en 0
+		if (actual != null) {
+			// Marcamos n como visitado
+			visitados.insertar(actual.getElem(), visitados.longitud() + 1);
+
+			// Camino encontrado
+			if (actual.getElem().equals(dest)) {
+				// Agregamos el puntaje a la lista
+				visitados.insertar(puntosActuales, visitados.longitud() + 1);
+				// Si la lista del posible camino es vacía o requiere más puntaje se reemplaza
+				// por la actual
+				if (caminoMenosPuntos.esVacia()
+						|| (int) visitados.recuperar(visitados.longitud()) < (int) caminoMenosPuntos
+								.recuperar(caminoMenosPuntos.longitud())) {
+					caminoMenosPuntos = visitados.clone();
+				}
+			} else {
+				// Si no es el destino verifica entre actual y el destino
+				NodoAdy ady = actual.getPrimerAdy();
+				while (ady != null) {
+					// Sumamos el puntaje del arco para luego comparar
+					puntosActuales += ady.getEtiqueta();
+					// Verifica que no esté visitado
+					if (visitados.localizar(ady.getVertice().getElem()) < 0) {
+						minimoPuntajeParaPasarAux(ady.getVertice(), dest, puntosActuales, visitados, caminoMenosPuntos);
+					}
+					ady = ady.getSigAdyacente();
+				}
+			}
+		}
+	}
+
+	public Lista puntajeMaxSinPasarPor(Object origen, Object destino, Object evitada, int puntos) {
+		// Verifica si ambos vertices existen
+		NodoVert auxO = null;
+		NodoVert auxD = null;
+		NodoVert aux = this.inicio;
+		Lista caminosPosibles = new Lista();
+
+		while ((auxO == null || auxD == null) && aux != null) {
+			if (aux.getElem().equals(origen)) {
+				auxO = aux;
+			}
+			if (aux.getElem().equals(destino)) {
+				auxD = aux;
+			}
+			aux = aux.getSigVertice();
+		}
+
+		// Si la evitada es el origen o el destino no tiene sentido recorrer
+		if (auxO != null && auxD != null && !auxO.equals(evitada) && !auxD.equals(evitada)) {
+			// Si existen y no son iguales a la evitada buscamos un camino entre ambos
+			Lista visitados = new Lista();
+
+			puntajeMaxSinPasarPorAux(auxO, destino, evitada, 0, puntos, visitados, caminosPosibles);
+		}
+
+		return caminosPosibles;
+	}
+
+	private void puntajeMaxSinPasarPorAux(NodoVert actual, Object dest, Object evitada, int puntosActuales,
+			int puntosMaximos, Lista visitados, Lista caminos) {
+		// Precondición: puntosActuales comienza en 0
+
+		if (actual != null) {
+			// Camino posible encontrado
+			if (actual.getElem().equals(dest)) {
+				caminos.insertar(visitados, caminos.longitud() + 1);
+			} else {
+				// Si no es el destino verifica entre n y el destino
+				// Marcamos n como visitado
+				visitados.insertar(actual.getElem(), visitados.longitud() + 1);
+				NodoAdy ady = actual.getPrimerAdy();
+				while (ady != null) {
+					// Sumamos el puntaje del arco para limitar
+					puntosActuales += ady.getEtiqueta();
+					// Verifica que no esté visitado
+					if (visitados.localizar(ady.getVertice().getElem()) < 0 && puntosActuales <= puntosMaximos
+							&& !ady.getVertice().getElem().equals(evitada)) {
+						// Sigue buscando si no fue visitado, si no supera la puntuación máxima y si no
+						// es el evitado
+						puntajeMaxSinPasarPorAux(ady.getVertice(), dest, evitada, puntosActuales, puntosMaximos,
+								visitados, caminos);
+					}
+					ady = ady.getSigAdyacente();
+				}
+			}
+		}
 	}
 
 }

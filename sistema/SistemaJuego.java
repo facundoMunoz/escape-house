@@ -15,7 +15,7 @@ public class SistemaJuego {
 	public static int pedirCodigo() {
 		return inputInt.nextInt();
 	}
-	
+
 	public static String pedirNombre() {
 		return inputText.nextLine();
 	}

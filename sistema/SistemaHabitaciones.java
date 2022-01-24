@@ -23,7 +23,7 @@ public class SistemaHabitaciones {
 				System.out.println(mostrarHabitacion(habitaciones));
 				break;
 			case 2:
-				System.out.println(habitacionesContiguas(mapa));
+				System.out.println(habitacionesContiguas(habitaciones, mapa));
 				break;
 			case 3:
 				System.out.println(esPosibleLlegar(habitaciones, mapa));
@@ -58,15 +58,16 @@ public class SistemaHabitaciones {
 		return habitacion;
 	}
 
-	private static String habitacionesContiguas(Grafo mapa) {
+	private static String habitacionesContiguas(ArbolAVL habitaciones, Grafo mapa) {
 		// Cargar habitación
 		System.out.println("Ingrese el código de la habitación:");
 		int codigo = SistemaJuego.pedirCodigo();
-		Lista adyacentesYEtiquetas = mapa.listarAdyacentesYEtiquetas(codigo);
-		String contiguas;
+		Habitacion habitacion = (Habitacion) habitaciones.getObjeto(codigo);
+		Lista adyacentesYEtiquetas = mapa.listarAdyacentesYEtiquetas(habitacion);
+		String contiguas = "El código no corresponde a una habitación cargada";
 
 		if (!adyacentesYEtiquetas.esVacia()) {
-			contiguas = "Código habitación - Nombre habitación | Puntaje para cruzar/n";
+			contiguas = "Habitaciones contiguas a " + codigo + " - " + habitacion.getNombre() + "\n";
 			int posicion = 1;
 			int longitudLista = adyacentesYEtiquetas.longitud();
 
@@ -78,10 +79,10 @@ public class SistemaHabitaciones {
 				contiguas += habitacionActual.getCodigo() + " - " + habitacionActual.getNombre() + " | ";
 				// Cargamos el puntaje necesario
 				posicion++;
-				contiguas += adyacentesYEtiquetas.recuperar(posicion) + "\n";
+				contiguas += adyacentesYEtiquetas.recuperar(posicion) + "p\n";
 				posicion++;
 			}
-		} else {
+		} else if (habitacion != null) {
 			contiguas = "No hay habitaciones contiguas";
 		}
 
@@ -128,7 +129,7 @@ public class SistemaHabitaciones {
 		int codigoDestino = SistemaJuego.pedirCodigo();
 		Habitacion habitacionDestino = (Habitacion) habitaciones.getObjeto(codigoDestino);
 
-		String salida;
+		String salida = "No existe un camino";
 		Lista listaYPuntaje = mapa.minimoPuntajeParaPasar(habitacionOrigen, habitacionDestino);
 		int longitudLista = listaYPuntaje.longitud();
 
@@ -141,8 +142,8 @@ public class SistemaHabitaciones {
 			// El elemento final se cargar a parte porque es el puntaje
 			salida += "Puntaje necesario: " + listaYPuntaje.recuperar(longitudLista);
 
-		} else {
-			salida = "Alguna o ambas habitaciones no existen o no hay un camino";
+		} else if (habitacionOrigen == null || habitacionDestino == null) {
+			salida = "Alguna o ambas habitaciones no existen";
 		}
 
 		return salida;
@@ -182,13 +183,15 @@ public class SistemaHabitaciones {
 					// Listamos las habitaciones del camino
 					salida += ((Habitacion) caminoActual.recuperar(posicionCamino)).getNombre() + " -> ";
 				}
-				
+
 				salida += "\n";
 			}
+		} else if (habitacionOrigen != null && habitacionDestino != null) {
+			salida = "Alguna o ambas habitaciones no existen";
 		} else {
-			salida = "Alguna o ambas habitaciones no existen o no hay un camino";
+			salida = "No existe un camino";
 		}
-		
+
 		return salida;
 	}
 

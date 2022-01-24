@@ -1,5 +1,7 @@
 package estructuras;
 
+import objetos.*;
+
 public class ArbolAVL {
 
 	private NodoAVL raiz;
@@ -349,6 +351,59 @@ public class ArbolAVL {
 
 	public boolean vacio() {
 		return this.raiz == null;
+	}
+
+	@Override
+	public String toString() {
+		String cadena = "Arbol vacio";
+
+		if (this.raiz != null) {
+			cadena = "";
+			cadena = stringAux(this.raiz, cadena);
+		}
+		return cadena;
+	}
+
+	private String stringAux(NodoAVL nodo, String cadena) {
+		String cadena2 = cadena;
+		cadena2 += "Nodo: " + nombreSegunClase(nodo);
+		if (nodo.getIzquierdo() != null) {
+			cadena2 += " | HI: " + nombreSegunClase(nodo.getIzquierdo());
+		} else {
+			cadena2 += " | HI: -";
+		}
+
+		if (nodo.getDerecho() != null) {
+			cadena2 += " | HD: " + nombreSegunClase(nodo.getDerecho()) + "\n";
+		} else {
+			cadena2 += " | HD: -\n";
+		}
+
+		if (nodo.getIzquierdo() != null) {
+			cadena2 = stringAux(nodo.getIzquierdo(), cadena2);
+		}
+
+		if (nodo.getDerecho() != null) {
+			cadena2 = stringAux(nodo.getDerecho(), cadena2);
+		}
+
+		return cadena2;
+	}
+
+	private String nombreSegunClase(NodoAVL nodo) {
+		// Método que define cómo llamar al objeto de un nodo según su clase
+		String nombre = "null";
+		Object objeto = nodo.getObjeto();
+
+		if (objeto.getClass() == Desafio.class) {
+			// Si es un desafio su atributo clave es el puntaje
+			nombre = ((Desafio) objeto).getPuntaje() + " - " + ((Desafio) objeto).getNombre();
+		} else if (objeto.getClass() == Habitacion.class) {
+			// Si es una habitación es el código
+			nombre = ((Habitacion) objeto).getCodigo() + " - " + ((Habitacion) objeto).getNombre();
+		}
+
+		return nombre;
 	}
 
 }

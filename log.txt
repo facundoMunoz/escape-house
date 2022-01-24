@@ -1,5 +1,5 @@
 
-Ingreso al sistema Escape House 10-01-2022 21:54:18
+Ingreso al sistema Escape House 24-01-2022 14:05:44
 Carga de habitaciones
 Se crea la habitación 1
 Se crea la habitación 2
@@ -31,4 +31,24 @@ Se crea el equipo Los Valientes
 Se crea el equipo Los Locos Adams
 Carga del mapa
 Se crea la puerta de 1 a 2
+Se crea la puerta de 1 a 4
+Se crea la puerta de 1 a 8
+Se crea la puerta de 1 a 7
+Se crea la puerta de 1 a 9
+Se crea la puerta de 1 a 14
 Se crea la puerta de 2 a 3
+Se crea la puerta de 2 a 12
+Se crea la puerta de 5 a 6
+Se crea la puerta de 5 a 8
+Se crea la puerta de 8 a 13
+Se crea la puerta de 8 a 9
+Se crea la puerta de 9 a 11
+Se crea la puerta de 9 a 10
+Se crea la puerta de 14 a 15
+Se crea la puerta de 14 a 17
+Se crea la puerta de 15 a 16
+Se crea la puerta de 17 a 18
+Se crea la puerta de 17 a 20
+Se crea la puerta de 17 a 19
+Se crea la puerta de 19 a 21
+Salida del sistema Escape House 24-01-2022 14:08:23

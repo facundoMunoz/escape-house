@@ -90,7 +90,7 @@ public class TablaHash {
 		if (codigo < 0) {
 			codigo = -codigo;
 		}
-		
+
 		return codigo;
 	}
 
@@ -102,7 +102,7 @@ public class TablaHash {
 		while (pos < TAMANIO) {
 			NodoDicc nodo = hash[pos];
 			while (nodo != null) {
-				texto = texto + nodo.getObjeto().toString() + ", ";
+				texto = texto + nodo.getObjeto().toString() + "\n\n";
 				nodo = nodo.getEnlace();
 			}
 			pos++;

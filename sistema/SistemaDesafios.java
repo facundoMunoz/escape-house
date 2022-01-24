@@ -65,8 +65,14 @@ public class SistemaDesafios {
 		if (equipo != null) {
 			// Si el equipo existe listamos sus desafíos resueltos
 			TablaHash desafiosResueltos = equipo.getDesafiosResueltos();
-			listadoResueltos = "Desafíos resueltos por '" + equipo.getNombre() + "':";
-			listadoResueltos += desafiosResueltos.toString();
+
+			
+			if(desafiosResueltos.esVacia()) {
+				listadoResueltos = "Desafíos resueltos por '" + equipo.getNombre() + "':";
+				listadoResueltos += desafiosResueltos.toString();				
+			} else {
+				listadoResueltos = "El equipo no tiene desafíos resueltos";
+			}
 		}
 
 		return listadoResueltos;
@@ -114,7 +120,7 @@ public class SistemaDesafios {
 
 		Lista listaFinalDesafios = new Lista();
 
-		for (int posicion = 0; posicion <= longitudLista; posicion++) {
+		for (int posicion = 1; posicion <= longitudLista; posicion++) {
 			Desafio desafioActual = (Desafio) posiblesDesafios.recuperar(posicion);
 
 			if (desafioActual.getTipo().equals(tipoDesafio)) {
@@ -122,7 +128,7 @@ public class SistemaDesafios {
 			}
 		}
 
-		return "Desafíos de tipo " + tipoDesafio + " entre " + puntajeMinimo + "y" + puntajeMaximo + ":\n"
+		return "Desafíos de tipo " + tipoDesafio + " entre " + puntajeMinimo + " y " + puntajeMaximo + " puntos:\n"
 				+ listaFinalDesafios.toString();
 	}
 

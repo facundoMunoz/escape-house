@@ -48,7 +48,7 @@ public class Habitacion {
 		this.nombre = nombre;
 	}
 
-	public void setPlanta(byte planta) {
+	public void setPlanta(int planta) {
 		this.planta = planta;
 	}
 

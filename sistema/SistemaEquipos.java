@@ -26,7 +26,7 @@ public class SistemaEquipos {
 				System.out.println(mostrarEquipo(equipos));
 				break;
 			case 2:
-				System.out.println(posiblesDesafios(equipos, habitaciones, mapa, desafios));
+				System.out.print(posiblesDesafios(equipos, habitaciones, mapa, desafios));
 				break;
 			case 3:
 				System.out.println(jugarDesafio(equipos, desafios));
@@ -73,26 +73,29 @@ public class SistemaEquipos {
 		String desafiosPosibles = "";
 
 		if (equipo != null && habitacion != null) {
-			int puntajeMinimo = (int) mapa.etiquetaArco(equipo.getHabitacion(), habitacion);
+			int puntajeMinimo = mapa.etiquetaArco(equipo.getHabitacion(), habitacion);
 			int puntajeActualEquipo = equipo.getPuntajeActual();
 
 			if (puntajeMinimo != -1) {
 				// Buscamos los desafíos posibles
 				Lista listaDesafios = desafios.listar();
+				TablaHash desafiosJugados = equipo.getDesafiosResueltos();
 				int longitudListaDesafios = listaDesafios.longitud();
 
-				for (int posicion = 0; posicion <= longitudListaDesafios; posicion++) {
+				for (int posicion = 1; posicion <= longitudListaDesafios; posicion++) {
 					Desafio desafioActual = (Desafio) listaDesafios.recuperar(posicion);
 
-					if ((int) desafioActual.getPuntaje() + puntajeActualEquipo >= puntajeMinimo) {
-						desafiosPosibles += desafioActual.toString() + "/n";
+					if (!desafiosJugados.pertenece(desafioActual.getPuntaje())
+							&& (int) desafioActual.getPuntaje() + puntajeActualEquipo >= puntajeMinimo) {
+						// El desafío no debe estar completado y el puntaje debe alcanzar
+						desafiosPosibles += desafioActual.toString() + "\n\n";
 					}
 				}
-				
-				if(desafiosPosibles.equals("")) {
+
+				if (desafiosPosibles.equals("")) {
 					desafiosPosibles = "No hay desafíos cuyo puntaje alcance para pasar de habitación";
 				} else {
-					desafiosPosibles = "Desafíos cuyo puntaje alcanza para pasar de habitación:/n" + desafiosPosibles;
+					desafiosPosibles = "Desafíos cuyo puntaje alcanza para pasar de habitación:\n" + desafiosPosibles;
 				}
 			} else {
 				desafiosPosibles = "La habitación no es adyacente";
@@ -153,7 +156,7 @@ public class SistemaEquipos {
 					equipo.setHabitacion(habitacionLlegada);
 					equipo.setPuntajeActual(0);
 					puede = "Equipo '" + equipo.getNombre() + "' se mueve a la habitación:\n"
-							+ habitacionLlegada.toString();
+							+ habitacionLlegada.getCodigo() + " - " + habitacionLlegada.getNombre();
 				} else {
 					puede = "El puntaje es insuficiente";
 				}
@@ -171,7 +174,7 @@ public class SistemaEquipos {
 		System.out.println("Ingrese el nombre del equipo:");
 		String nombre = SistemaJuego.pedirNombre();
 		Equipo equipo = (Equipo) equipos.getObjeto(nombre);
-		String puede = "El equipo no puede salir";
+		String puede = "El equipo no puede salir aún";
 
 		if (equipo != null && (equipo.getPuntajeAcumulado() >= equipo.getPuntajeSalida())
 				&& equipo.getHabitacion().getSalidaExterior()) {

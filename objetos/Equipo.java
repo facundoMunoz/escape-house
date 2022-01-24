@@ -63,15 +63,13 @@ public class Equipo {
 	public void setHabitacion(Habitacion habitacion) {
 		this.habitacion = habitacion;
 	}
-	
+
 	// Propias del tipo
 	@Override
 	public String toString() {
-		return "Nombre: " + this.nombre +
-				"\nPuntaje para salir: " + this.puntajeSalida +
-				"\nPuntaje total acumulado: " + this.puntajeAcumulado +
-				"\nPuntaje en habitación actual: " + this.puntajeActual +
-				"\nHabitación actual: " + this.habitacion.getCodigo() + " - " + this.habitacion.getNombre();
+		return "Nombre: " + this.nombre + "\nPuntaje para salir: " + this.puntajeSalida + "\nPuntaje total acumulado: "
+				+ this.puntajeAcumulado + "\nPuntaje en habitación actual: " + this.puntajeActual
+				+ "\nHabitación actual: " + this.habitacion.getCodigo() + " - " + this.habitacion.getNombre();
 	}
 
 }

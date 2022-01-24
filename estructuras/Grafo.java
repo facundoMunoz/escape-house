@@ -1,5 +1,7 @@
 package estructuras;
 
+import objetos.Habitacion;
+
 public class Grafo {
 	// Grafo etiquetado implementado para funcionar como mapa de la casona
 	private NodoVert inicio;
@@ -21,7 +23,7 @@ public class Grafo {
 		return exito;
 	}
 
-	public NodoVert ubicarVertice(Object buscado) {
+	private NodoVert ubicarVertice(Object buscado) {
 		NodoVert aux = this.inicio;
 
 		// Recorre hasta encontrarlo o hasta terminar la lista
@@ -55,6 +57,7 @@ public class Grafo {
 					anterior = anterior.getSigVertice();
 				}
 				// Anidamos el anterior con el siguiente del nodo
+				System.out.println("ELIMINADO");
 				anterior.setSigVertice(nodo.getSigVertice());
 			}
 
@@ -369,12 +372,13 @@ public class Grafo {
 		return adyacentes;
 	}
 
-	public Object etiquetaArco(Object vertice, Object adyacente) {
+	public int etiquetaArco(Object vertice, Object adyacente) {
 		// Recorrido con fuerza bruta de los adyacentes de un vértice
 		// Vértice inicial
 		NodoVert nodoVertice = this.ubicarVertice(vertice);
 		NodoAdy nodoAdyacente = null;
-		Object etiqueta = null;
+		// Retorna -1 si no lo encuentra
+		int etiqueta = -1;
 
 		if (nodoVertice != null) {
 			// Mientras encontremos adyacentes revisamos si es el buscado
@@ -491,7 +495,7 @@ public class Grafo {
 				if (caminoMenosPuntos.esVacia()
 						|| (int) visitados.recuperar(visitados.longitud()) < (int) caminoMenosPuntos
 								.recuperar(caminoMenosPuntos.longitud())) {
-					caminoMenosPuntos = visitados.clone();
+					caminoMenosPuntos = visitados;
 				}
 			} else {
 				// Si no es el destino verifica entre actual y el destino
@@ -565,6 +569,40 @@ public class Grafo {
 				}
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		NodoVert vertice = this.inicio;
+		String texto = "";
+
+		while (vertice != null) {
+			Habitacion habitacion = (Habitacion) vertice.getElem();
+			NodoAdy adyacente = vertice.getPrimerAdy();
+			// Agregamos el vertice actual
+			texto += " _ " + habitacion.getCodigo() + " - " + habitacion.getNombre();
+
+			// Si tiene adyacentes los listamos
+			while (adyacente != null) {
+				Habitacion habitacionAdy = (Habitacion) adyacente.getVertice().getElem();
+
+				// Formato ' -puntajeParaPasar-> codigoHabitacion - nombreHabitacion'
+				texto += " -> " + habitacionAdy.getNombre() + " (" + adyacente.getEtiqueta() + "p)";
+
+				adyacente = adyacente.getSigAdyacente();
+			}
+
+			// Movemos el vértice y saltamos de línea
+			vertice = vertice.getSigVertice();
+			texto += "\n";
+		}
+
+		if (texto.equals("")) {
+			// Si no se modifica el texto no hay habitaciones
+			texto = "¡No hay habitaciones cargadas!";
+		}
+
+		return texto;
 	}
 
 }

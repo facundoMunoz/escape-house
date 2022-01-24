@@ -33,13 +33,13 @@ public class SistemaJuego {
 		FileWriter archivoSalida = new FileWriter(salida);
 		BufferedWriter log = new BufferedWriter(archivoSalida);
 
-		// Obtenemos la fecha de acceso
+		// Obtenemos la fecha de acceso para log
 		Date fecha = new Date();
 		SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 		logUpdate("Ingreso al sistema Escape House " + formato.format(fecha), log);
 
-		// Objetos
+		// Estructuras para datos
 		ArbolAVL habitaciones = new ArbolAVL();
 		ArbolAVL desafios = new ArbolAVL();
 		TablaHash equipos = new TablaHash();
@@ -49,7 +49,7 @@ public class SistemaJuego {
 		cargarHabitaciones(mapa, habitaciones, log);
 		cargarDesafios(desafios, log);
 		cargarEquipos(equipos, habitaciones, log);
-		cargarMapa(mapa, habitaciones, log);
+		cargarPuertasMapa(mapa, habitaciones, log);
 
 		int opcionMenu;
 
@@ -59,7 +59,7 @@ public class SistemaJuego {
 			opcionMenu = pedirCodigo();
 			switch (opcionMenu) {
 			case 1:
-				System.out.println("Falta implementar");
+				SistemaABM.menuABM(habitaciones, mapa, desafios, equipos);
 				break;
 			case 2:
 				SistemaHabitaciones.menuHabitaciones(habitaciones, mapa);
@@ -71,9 +71,10 @@ public class SistemaJuego {
 				SistemaEquipos.menuEquipos(equipos, desafios, habitaciones, mapa);
 				break;
 			case 5:
-				System.out.println("Falta implementar");
+				menuConsulta(habitaciones, desafios, equipos, mapa);
 				break;
 			case 0:
+				System.out.println("Cerrando Escape House, ¡Adiós!");
 				break;
 			default:
 				System.out.println("Opción no contemplada");
@@ -228,7 +229,7 @@ public class SistemaJuego {
 
 	}
 
-	private static void cargarMapa(Grafo mapa, ArbolAVL habitaciones, BufferedWriter log)
+	private static void cargarPuertasMapa(Grafo mapa, ArbolAVL habitaciones, BufferedWriter log)
 			throws FileNotFoundException, IOException {
 		// Obtener archivo
 		String ruta = System.getProperty("user.dir") + "\\src\\datos\\puertas.txt";
@@ -275,7 +276,36 @@ public class SistemaJuego {
 		archivoDesafios.close();
 	}
 
-	// ABM de objetos
-
 	// Consulta general
+	private static void menuConsulta(ArbolAVL habitaciones, ArbolAVL desafios, TablaHash equipos, Grafo mapa) {
+		int opcionMenu;
+
+		do {
+			System.out.println("Ingrese una opción:");
+			System.out.println("1. Ver árbol AVL de habitaciones\n" + "2. Ver árbol AVL de desafíos\n"
+					+ "3. Ver Tabla Hash de equipos\n" + "4. Ver Grafo del mapa\n" + "0. Volver");
+			opcionMenu = pedirCodigo();
+			switch (opcionMenu) {
+			case 1:
+				System.out.println(habitaciones.toString());
+				break;
+			case 2:
+				System.out.println(desafios.toString());
+				break;
+			case 3:
+				System.out.println(equipos.toString());
+				break;
+			case 4:
+				System.out.println(mapa.toString());
+				break;
+			case 0:
+				break;
+			default:
+				System.out.println("Opción no contemplada");
+				break;
+			}
+			System.out.println();
+		} while (opcionMenu != 0);
+	}
+
 }

@@ -2,117 +2,116 @@ package estructuras;
 
 public class Cola {
 
-    private Nodo frente;
-    private Nodo fin;
+	private Nodo frente;
+	private Nodo fin;
 
-    // Constructor
-    public Cola() {
+	// Constructor
+	public Cola() {
 
-        this.fin = null;
-        this.frente = null;
+		this.fin = null;
+		this.frente = null;
 
-    }
+	}
 
-    // Modificadores 
-    public boolean poner(Object nuevoElem) {
-        Nodo nuevoNodo = new Nodo(nuevoElem, null);
+	// Modificadores
+	public boolean poner(Object nuevoElem) {
+		Nodo nuevoNodo = new Nodo(nuevoElem, null);
 
-        if (!this.esVacia()) {
-            this.fin.setEnlace(nuevoNodo);
-            this.fin = this.fin.getEnlace();
-        } else {
-            this.fin = nuevoNodo;
-            this.frente = nuevoNodo;
-        }
+		if (this.esVacia()) {
+			// Si está vacía el nodo es el nuevo frente y fin
+			this.fin = nuevoNodo;
+			this.frente = nuevoNodo;
+		} else {
+			this.fin.setEnlace(nuevoNodo);
+			this.fin = this.fin.getEnlace();
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    public boolean sacar() {
-        boolean exito = true;
+	public boolean sacar() {
+		boolean exito = true;
 
-        if (this.esVacia()) {
-            exito = false;
-        } else {
-            this.frente = this.frente.getEnlace();
-            if (this.frente == null) {
-                // Si el frente pasa a ser null tampoco hay fin
-                this.fin = null;
-            }
-        }
+		if (this.esVacia()) {
+			exito = false;
+		} else {
+			this.frente = this.frente.getEnlace();
+			if (this.frente == null) {
+				// Si el frente pasa a ser null tampoco hay fin
+				this.fin = null;
+			}
+		}
 
-        return exito;
-    }
+		return exito;
+	}
 
-    // Obesrvadores 
-    public Object obtenerFrente() {
-        Object elementoFrente;
+	// Obesrvadores
+	public Object obtenerFrente() {
+		Object elementoFrente = null;
 
-        if (this.esVacia()) {
-            elementoFrente = null;
-        } else {
-            elementoFrente = this.frente.getElemento();
-        }
+		if (!this.esVacia()) {
+			elementoFrente = this.frente.getElemento();
+		}
 
-        return elementoFrente;
-    }
+		return elementoFrente;
+	}
 
-    public boolean esVacia() {
+	public boolean esVacia() {
 
-        return this.frente == null;
+		return this.frente == null;
 
-    }
+	}
 
-    // Propias del tipo
-    public void vaciar() {
-        // Deja que se lleve los nodos el garbage collector
+	// Propias del tipo
+	public void vaciar() {
 
-        this.fin = null;
-        this.frente = null;
+		// Deja que se lleve los nodos el garbage collector
+		this.fin = null;
+		this.frente = null;
 
-    }
+	}
 
-    @Override
-    public Cola clone() {
-        Cola clon = new Cola();
+	@Override
+	public Cola clone() {
+		Cola clon = new Cola();
 
-        if (!this.esVacia()) {
-            clon.frente = new Nodo(this.frente.getElemento(), null);
-            clon.fin = clon.frente;
-            Nodo nuevoNodo = this.frente.getEnlace();
+		if (!this.esVacia()) {
+			clon.frente = new Nodo(this.frente.getElemento(), null);
+			clon.fin = clon.frente;
+			Nodo nuevoNodo = this.frente.getEnlace();
 
-            while (nuevoNodo != null) {
-                // Vamos asignando el fin al próximo nodo
-                clon.fin.setEnlace(new Nodo(nuevoNodo.getElemento(), null));
-                nuevoNodo = nuevoNodo.getEnlace();
-                clon.fin = clon.fin.getEnlace();
-            }
-        }
+			while (nuevoNodo != null) {
+				// Vamos asignando el fin al próximo nodo
+				clon.fin.setEnlace(new Nodo(nuevoNodo.getElemento(), null));
+				nuevoNodo = nuevoNodo.getEnlace();
+				clon.fin = clon.fin.getEnlace();
+			}
+		}
 
-        return clon;
-    }
+		return clon;
+	}
 
-    // Testing
-    @Override
-    public String toString() {
-        String texto;
+	// Testing
+	@Override
+	public String toString() {
+		String texto;
 
-        if (this.esVacia()) {
-            texto = "Cola vacia";
-        } else {
-            Nodo nodoAuxiliar = this.frente;
-            texto = "";
+		if (this.esVacia()) {
+			texto = "Cola vacia";
+		} else {
+			Nodo nodoAuxiliar = this.frente;
+			texto = "";
 
-            while (nodoAuxiliar != null) {
-                texto += nodoAuxiliar.getElemento();
-                nodoAuxiliar = nodoAuxiliar.getEnlace();
-                if (nodoAuxiliar != null) {
-                    texto += ",";
-                }
-            }
-        }
+			while (nodoAuxiliar != null) {
+				texto += nodoAuxiliar.getElemento();
+				nodoAuxiliar = nodoAuxiliar.getEnlace();
+				if (nodoAuxiliar != null) {
+					texto += ",";
+				}
+			}
+		}
 
-        return texto;
-    }
+		return texto;
+	}
 
 }

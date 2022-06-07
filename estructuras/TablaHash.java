@@ -94,6 +94,26 @@ public class TablaHash {
 		return codigo;
 	}
 
+	public Lista hacerLista() {
+		// Recorremos con fuerza bruta los nodos del arreglo
+		Lista lista = new Lista();
+		int pos = 0;
+		int posLista = 1;
+
+		while (pos < TAMANIO) {
+			NodoDicc nodo = hash[pos];
+
+			while (nodo != null) {
+				lista.insertar(nodo.getObjeto(), posLista);
+				posLista++;
+				nodo = nodo.getEnlace();
+			}
+			pos++;
+		}
+
+		return lista;
+	}
+
 	@Override
 	public String toString() {
 		String texto = "";
@@ -102,7 +122,7 @@ public class TablaHash {
 		while (pos < TAMANIO) {
 			NodoDicc nodo = hash[pos];
 			while (nodo != null) {
-				texto = texto + nodo.getObjeto().toString() + "\n\n";
+				texto = texto + nodo.getObjeto().toString() + "\n";
 				nodo = nodo.getEnlace();
 			}
 			pos++;

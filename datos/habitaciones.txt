@@ -1,21 +1,26 @@
-H;1;Recibidor;0;20;true
-H;2;Sala de estar;0;10;false
-H;3;Biblioteca;0;20;false
-H;4;Baño PB;0;5;false
+// Habitación Código Nombre Piso MetrosCuadrados SalidaExterior
 H;5;Cocina;0;10;false
-H;6;Despensa;0;5;false
-H;7;Cochera;0;15;true
-H;8;Comedor;0;15;false
-H;9;Quincho;0;15;true
 H;10;Invernadero;0;15;false
-H;11;Lavadero;0;5;false
-H;12;Gimnasio;0;10;false
-H;13;Estudio;0;5;false
-H;14;Escaleras;0;10;false
 H;15;Sótano;-1;20;false
-H;16;Sala de cine;-1;15;false
+// Rotación izquierda en raíz
+H;3;Biblioteca;0;20;false
+H;1;Recibidor;0;20;true
+// Rotación derecha en nodo
+H;7;Cochera;0;15;true
+// Rotación izquierda-derecha en raíz
+H;4;Baño PB;0;5;false
+H;13;Estudio;0;5;false
 H;17;Pasillo;1;10;false
+H;14;Escaleras;0;10;false
+// Rotación derecha-izquierda en nodo
+H;2;Sala de estar;0;10;false
+H;12;Gimnasio;0;10;false
+H;6;Despensa;0;5;false
+H;16;Sala de cine;-1;15;false
 H;18;Habitación de huéspedes;1;10;false
 H;19;Habitación principal;1;20;false
+H;8;Comedor;0;15;false
+H;9;Quincho;0;15;true
+H;11;Lavadero;0;5;false
 H;20;Baño P1;1;10;false
 H;21;Balcón;1;10;false

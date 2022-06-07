@@ -1,7 +1,5 @@
 package estructuras;
 
-import objetos.*;
-
 public class ArbolAVL {
 
 	private NodoAVL raiz;
@@ -42,7 +40,7 @@ public class ArbolAVL {
 		boolean exito;
 
 		if (!this.vacio()) {
-			exito = insertarAux(this.raiz, nuevaClave, nuevoObjeto);
+			exito = insertarAux(null, this.raiz, nuevaClave, nuevoObjeto);
 		} else {
 			this.raiz = new NodoAVL(nuevaClave, nuevoObjeto);
 			exito = true;
@@ -51,7 +49,7 @@ public class ArbolAVL {
 		return exito;
 	}
 
-	private boolean insertarAux(NodoAVL nodo, Comparable nuevaClave, Object nuevoObjeto) {
+	private boolean insertarAux(NodoAVL padre, NodoAVL nodo, Comparable nuevaClave, Object nuevoObjeto) {
 		boolean exito = true;
 
 		if ((nuevaClave.compareTo(nodo.getClave()) == 0)) {
@@ -59,20 +57,20 @@ public class ArbolAVL {
 			exito = false;
 		} else if (nuevaClave.compareTo(nodo.getClave()) < 0) {
 			if (nodo.getIzquierdo() != null) {
-				exito = insertarAux(nodo.getIzquierdo(), nuevaClave, nuevoObjeto);
+				exito = insertarAux(nodo, nodo.getIzquierdo(), nuevaClave, nuevoObjeto);
 			} else {
 				nodo.setIzquierdo(new NodoAVL(nuevaClave, nuevoObjeto));
 			}
 		} else {
 			if (nodo.getDerecho() != null) {
-				exito = insertarAux(nodo.getDerecho(), nuevaClave, nuevoObjeto);
+				exito = insertarAux(nodo, nodo.getDerecho(), nuevaClave, nuevoObjeto);
 			} else {
 				nodo.setDerecho(new NodoAVL(nuevaClave, nuevoObjeto));
 			}
 		}
 
 		if (exito) {
-			balancear(nodo);
+			balancear(padre, nodo);
 		}
 
 		return exito;
@@ -106,7 +104,7 @@ public class ArbolAVL {
 			}
 
 			if (eliminado) {
-				balancear(hijo);
+				balancear(padre, hijo);
 			}
 		}
 
@@ -152,10 +150,8 @@ public class ArbolAVL {
 		NodoAVL padreNuevoNodo = buscarPadreNodoMinimo(hijo.getDerecho());
 		NodoAVL nuevoNodo = padreNuevoNodo.getIzquierdo();
 
-		/*
-		 * Candidato con el menor hijo del subarbol derecho Ponemos el elemento de dicho
-		 * candidato
-		 */
+		// Candidato con el menor hijo del subarbol derecho
+		// Ponemos el elemento de dicho candidato
 		if (nuevoNodo != null) {
 			hijo.setClave(nuevoNodo.getClave());
 			hijo.setObjeto(nuevoNodo.getObjeto());
@@ -182,26 +178,38 @@ public class ArbolAVL {
 		return encontrado;
 	}
 
-	private void balancear(NodoAVL nodo) {
+	private void balancear(NodoAVL padre, NodoAVL nodo) {
+		NodoAVL retorno;
+
+		nodo.recalcularAltura();
 		if (this.balance(nodo) < -1) {
 			// Está desbalanceado hacia la derecha
 			if (this.balance(nodo.getDerecho()) < 0) {
 				// Si ambos están desbalanceados a la derecha es rotación simple izquierda
-				rotarIzquierda(nodo);
+				retorno = rotarIzquierda(nodo);
 			} else {
 				// Si no rota derecha-izquierda
-				rotarIzquierda(rotarDerecha(nodo));
+				nodo.setDerecho(rotarDerecha(nodo.getDerecho()));
+				retorno = rotarIzquierda(nodo);
+			}
+			if (padre != null) {
+				padre.setDerecho(retorno);
 			}
 		} else if (this.balance(nodo) > 1) {
 			// Está desbalanceado hacia la izquierda
-			if (this.balance(nodo.getDerecho()) < 0) {
+			if (this.balance(nodo.getIzquierdo()) > 0) {
 				// Si ambos están desbalanceados a la izquierda es rotación simple derecha
-				rotarDerecha(nodo);
+				retorno = rotarDerecha(nodo);
 			} else {
 				// Si no rota izquierda-derecha
-				rotarDerecha(rotarIzquierda(nodo));
+				nodo.setIzquierdo(rotarIzquierda(nodo.getIzquierdo()));
+				retorno = rotarDerecha(nodo);
+			}
+			if (padre != null) {
+				padre.setIzquierdo(retorno);
 			}
 		}
+		nodo.recalcularAltura();
 	}
 
 	private int balance(NodoAVL nodo) {
@@ -216,6 +224,10 @@ public class ArbolAVL {
 		hijoIzq.setDerecho(nodo);
 		nodo.setIzquierdo(temp);
 
+		if (nodo == this.raiz) {
+			this.raiz = hijoIzq;
+		}
+
 		return hijoIzq;
 	}
 
@@ -224,6 +236,10 @@ public class ArbolAVL {
 		NodoAVL temp = hijoDer.getIzquierdo();
 		hijoDer.setIzquierdo(nodo);
 		nodo.setDerecho(temp);
+
+		if (nodo == this.raiz) {
+			this.raiz = hijoDer;
+		}
 
 		return hijoDer;
 	}
@@ -358,23 +374,23 @@ public class ArbolAVL {
 		String cadena = "Arbol vacio";
 
 		if (this.raiz != null) {
-			cadena = "";
-			cadena = stringAux(this.raiz, cadena);
+			cadena = stringAux(this.raiz, "");
 		}
 		return cadena;
 	}
 
 	private String stringAux(NodoAVL nodo, String cadena) {
 		String cadena2 = cadena;
-		cadena2 += "Nodo: " + nombreSegunClase(nodo);
+
+		cadena2 += "Nodo: " + nodo.getObjeto().toString();
 		if (nodo.getIzquierdo() != null) {
-			cadena2 += " | HI: " + nombreSegunClase(nodo.getIzquierdo());
+			cadena2 += " | HI: " + nodo.getIzquierdo().getObjeto().toString();
 		} else {
 			cadena2 += " | HI: -";
 		}
 
 		if (nodo.getDerecho() != null) {
-			cadena2 += " | HD: " + nombreSegunClase(nodo.getDerecho()) + "\n";
+			cadena2 += " | HD: " + nodo.getDerecho().getObjeto().toString() + "\n";
 		} else {
 			cadena2 += " | HD: -\n";
 		}
@@ -388,22 +404,6 @@ public class ArbolAVL {
 		}
 
 		return cadena2;
-	}
-
-	private String nombreSegunClase(NodoAVL nodo) {
-		// Método que define cómo llamar al objeto de un nodo según su clase
-		String nombre = "null";
-		Object objeto = nodo.getObjeto();
-
-		if (objeto.getClass() == Desafio.class) {
-			// Si es un desafio su atributo clave es el puntaje
-			nombre = ((Desafio) objeto).getPuntaje() + " - " + ((Desafio) objeto).getNombre();
-		} else if (objeto.getClass() == Habitacion.class) {
-			// Si es una habitación es el código
-			nombre = ((Habitacion) objeto).getCodigo() + " - " + ((Habitacion) objeto).getNombre();
-		}
-
-		return nombre;
 	}
 
 }

@@ -2,55 +2,55 @@ package estructuras;
 
 public class NodoDicc {
 
-    private Object codigo;
-    private Object objeto;
-    private NodoDicc enlace;
+	private Object codigo;
+	private Object objeto;
+	private NodoDicc enlace;
 
-    // Constructor
-    public NodoDicc(Object codigo, Object objeto, NodoDicc enlace) {
+	// Constructor
+	public NodoDicc(Object codigo, Object objeto, NodoDicc enlace) {
 
-        this.codigo = codigo;
-        this.objeto = objeto;
-        this.enlace = enlace;
+		this.codigo = codigo;
+		this.objeto = objeto;
+		this.enlace = enlace;
 
-    }
-    
-    // Observadores
-    public Object getCodigo() {
+	}
 
-        return this.codigo;
+	// Observadores
+	public Object getCodigo() {
 
-    }
-    
-    public Object getObjeto() {
+		return this.codigo;
 
-    	return this.objeto;
+	}
 
-    }
+	public Object getObjeto() {
 
-    public NodoDicc getEnlace() {
+		return this.objeto;
 
-        return this.enlace;
+	}
 
-    }
+	public NodoDicc getEnlace() {
 
-    // Modificadores
-    public void setElemento(Object nuevoCodigo) {
+		return this.enlace;
 
-        this.codigo = nuevoCodigo;
+	}
 
-    }
-    
-    public void setObjecto(Object nuevoObjeto) {
+	// Modificadores
+	public void setElemento(Object nuevoCodigo) {
 
-    	this.objeto = nuevoObjeto;
+		this.codigo = nuevoCodigo;
 
-    }
+	}
 
-    public void setEnlace(NodoDicc nuevoEnlace) {
+	public void setObjecto(Object nuevoObjeto) {
 
-        this.enlace = nuevoEnlace;
+		this.objeto = nuevoObjeto;
 
-    }
+	}
+
+	public void setEnlace(NodoDicc nuevoEnlace) {
+
+		this.enlace = nuevoEnlace;
+
+	}
 
 }

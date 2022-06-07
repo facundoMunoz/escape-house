@@ -47,13 +47,13 @@ public class SistemaDesafios {
 	private static String mostrarDesafio(ArbolAVL desafios) {
 		System.out.println("Ingrese el puntaje:");
 		int codigo = SistemaJuego.pedirCodigo();
-		String habitacion = "El código no corresponde a un desafío cargado";
+		String desafio = "El código no corresponde a un desafío cargado";
 
 		if (desafios.pertenece(codigo)) {
-			habitacion = ((Desafio) desafios.getObjeto(codigo)).toString();
+			desafio = ((Desafio) desafios.getObjeto(codigo)).fullString();
 		}
 
-		return habitacion;
+		return desafio;
 	}
 
 	private static String mostrarDesafiosResueltos(ArbolAVL desafios, TablaHash equipos) {
@@ -66,10 +66,9 @@ public class SistemaDesafios {
 			// Si el equipo existe listamos sus desafíos resueltos
 			TablaHash desafiosResueltos = equipo.getDesafiosResueltos();
 
-			
-			if(desafiosResueltos.esVacia()) {
-				listadoResueltos = "Desafíos resueltos por '" + equipo.getNombre() + "':";
-				listadoResueltos += desafiosResueltos.toString();				
+			if (!desafiosResueltos.esVacia()) {
+				listadoResueltos = "Desafíos resueltos por '" + equipo.getNombre() + "':\n";
+				listadoResueltos += desafiosResueltos.toString();
 			} else {
 				listadoResueltos = "El equipo no tiene desafíos resueltos";
 			}
@@ -119,6 +118,8 @@ public class SistemaDesafios {
 		int longitudLista = posiblesDesafios.longitud();
 
 		Lista listaFinalDesafios = new Lista();
+		String salida = "No hay desafíos de tipo " + tipoDesafio + " entre " + puntajeMinimo + " y " + puntajeMaximo
+				+ " puntos:\n";
 
 		for (int posicion = 1; posicion <= longitudLista; posicion++) {
 			Desafio desafioActual = (Desafio) posiblesDesafios.recuperar(posicion);
@@ -128,8 +129,12 @@ public class SistemaDesafios {
 			}
 		}
 
-		return "Desafíos de tipo " + tipoDesafio + " entre " + puntajeMinimo + " y " + puntajeMaximo + " puntos:\n"
-				+ listaFinalDesafios.toString();
+		if (!listaFinalDesafios.esVacia()) {
+			salida = "Desafíos de tipo " + tipoDesafio + " entre " + puntajeMinimo + " y " + puntajeMaximo
+					+ " puntos:\n" + listaFinalDesafios.toString();
+		}
+
+		return salida;
 	}
 
 }

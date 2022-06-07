@@ -1,9 +1,9 @@
 package sistema;
 
-import estructuras.ArbolAVL;
-import estructuras.Grafo;
-import estructuras.TablaHash;
+import estructuras.*;
 import objetos.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 public class SistemaABM {
 
@@ -11,7 +11,8 @@ public class SistemaABM {
 		return "1. Modificar habitaciones\n" + "2. Modificar desafíos\n" + "3. Modificar equipos\n" + "0. Volver";
 	}
 
-	public static void menuABM(ArbolAVL habitaciones, Grafo mapa, ArbolAVL desafios, TablaHash equipos) {
+	public static void menuABM(ArbolAVL habitaciones, Grafo mapa, ArbolAVL desafios, TablaHash equipos,
+			BufferedWriter bw) throws IOException {
 		// Menú principal
 		int opcionMenu;
 
@@ -22,13 +23,13 @@ public class SistemaABM {
 
 			switch (opcionMenu) {
 			case 1:
-				menuHabitaciones(habitaciones, mapa);
+				menuHabitaciones(habitaciones, mapa, equipos, bw);
 				break;
 			case 2:
-				menuDesafios(desafios);
+				menuDesafios(desafios, bw);
 				break;
 			case 3:
-				menuEquipos(equipos, habitaciones);
+				menuEquipos(equipos, habitaciones, bw);
 				break;
 			case 0:
 				break;
@@ -41,7 +42,8 @@ public class SistemaABM {
 	}
 
 	// Habitaciones
-	private static void menuHabitaciones(ArbolAVL habitaciones, Grafo mapa) {
+	private static void menuHabitaciones(ArbolAVL habitaciones, Grafo mapa, TablaHash equipos, BufferedWriter bw)
+			throws IOException {
 		int opcionCrear;
 
 		do {
@@ -52,10 +54,10 @@ public class SistemaABM {
 
 			switch (opcionCrear) {
 			case 1:
-				System.out.println(crearHabitacion(habitaciones, mapa));
+				System.out.println(crearHabitacion(habitaciones, mapa, bw));
 				break;
 			case 2:
-				System.out.println(eliminarHabitacion(habitaciones, mapa));
+				System.out.println(eliminarHabitacion(habitaciones, mapa, equipos, bw));
 				break;
 			case 3:
 				System.out.println(modificarHabitacion(habitaciones));
@@ -70,7 +72,7 @@ public class SistemaABM {
 		} while (opcionCrear != 0);
 	}
 
-	private static String crearHabitacion(ArbolAVL habitaciones, Grafo mapa) {
+	private static String crearHabitacion(ArbolAVL habitaciones, Grafo mapa, BufferedWriter bw) throws IOException {
 		// Cargar habitación
 		System.out.println("Ingrese el código:");
 		int codigo = SistemaJuego.pedirCodigo();
@@ -102,19 +104,45 @@ public class SistemaABM {
 		habitaciones.insertar(codigo, habitacionNueva);
 		mapa.insertarVertice(habitacionNueva);
 
+		// Update log
+		SistemaJuego.logUpdate("Se crea habitación " + codigo, bw);
+
 		return "Habitación creada:\n" + habitacionNueva.toString();
 	}
 
-	private static String eliminarHabitacion(ArbolAVL habitaciones, Grafo mapa) {
+	private static String eliminarHabitacion(ArbolAVL habitaciones, Grafo mapa, TablaHash equipos, BufferedWriter bw)
+			throws IOException {
 		System.out.println("Ingrese el código de la habitación:");
 		int codigo = SistemaJuego.pedirCodigo();
 		Habitacion habitacion = (Habitacion) habitaciones.getObjeto(codigo);
 		String eliminado;
 
 		if (habitacion != null) {
-			habitaciones.eliminar(codigo);
-			mapa.eliminarVertice(habitacion);
+			Lista lista = equipos.hacerLista();
+			int pos = 1;
+			int tamanio = lista.longitud();
+			boolean habitacionEnUso = false;
+			// Dejamos eliminado inicializado
 			eliminado = "Habitación " + codigo + " eliminada";
+
+			while (pos <= tamanio && !habitacionEnUso) {
+				// Tenemos que asegurar que ningún equipo apunte a la habitación que se quiere
+				// eliminar
+				Equipo equipo = (Equipo) lista.recuperar(pos);
+
+				if (equipo.getHabitacion().getCodigo() == codigo) {
+					habitacionEnUso = true;
+					// Cambiamos eliminado si la habitación está en uso
+					eliminado = "Equipo " + equipo.getNombre() + " se encuentra en la habitación";
+				}
+				pos++;
+			}
+
+			if (!habitacionEnUso) {
+				habitaciones.eliminar(codigo);
+				mapa.eliminarVertice(habitacion);
+				SistemaJuego.logUpdate("Se elimina habitación " + codigo, bw);
+			}
 		} else {
 			eliminado = "El código no corresponde a una habitación cargada";
 		}
@@ -131,8 +159,8 @@ public class SistemaABM {
 		if (habitacion != null) {
 			int opcionMod;
 			System.out.println("¿Qué va a modificar?");
-			System.out.println("1. Nombre\n" + "2. Planta\n" + "3. Metros cuadrados\n" + "4. Cambiar salida al exterior\n"
-					+ "0. Volver");
+			System.out.println("1. Nombre\n" + "2. Planta\n" + "3. Metros cuadrados\n"
+					+ "4. Cambiar salida al exterior\n" + "0. Volver");
 			opcionMod = SistemaJuego.pedirCodigo();
 
 			switch (opcionMod) {
@@ -166,7 +194,7 @@ public class SistemaABM {
 	}
 
 	// Desafíos
-	private static void menuDesafios(ArbolAVL desafios) {
+	private static void menuDesafios(ArbolAVL desafios, BufferedWriter bw) throws IOException {
 		int opcionCrear;
 
 		do {
@@ -176,10 +204,10 @@ public class SistemaABM {
 
 			switch (opcionCrear) {
 			case 1:
-				System.out.println(crearDesafio(desafios));
+				System.out.println(crearDesafio(desafios, bw));
 				break;
 			case 2:
-				System.out.println(eliminarDesafio(desafios));
+				System.out.println(eliminarDesafio(desafios, bw));
 				break;
 			case 3:
 				System.out.println(modificarDesafio(desafios));
@@ -194,7 +222,7 @@ public class SistemaABM {
 		} while (opcionCrear != 0);
 	}
 
-	private static String crearDesafio(ArbolAVL desafios) {
+	private static String crearDesafio(ArbolAVL desafios, BufferedWriter bw) throws IOException {
 		// Cargar desafío
 		System.out.println("Ingrese el puntaje:");
 		int puntaje = SistemaJuego.pedirCodigo();
@@ -214,16 +242,21 @@ public class SistemaABM {
 		Desafio desafioNuevo = new Desafio(nombre, puntaje, tipo);
 		desafios.insertar(puntaje, desafioNuevo);
 
+		// Update log
+		SistemaJuego.logUpdate("Se crea desafío " + puntaje, bw);
+
 		return "Desafío creado:\n" + desafioNuevo.toString();
 	}
 
-	private static String eliminarDesafio(ArbolAVL desafios) {
+	private static String eliminarDesafio(ArbolAVL desafios, BufferedWriter bw) throws IOException {
 		System.out.println("Ingrese el puntaje del desafío:");
 		int puntaje = SistemaJuego.pedirCodigo();
 		String eliminado;
 
 		if (desafios.eliminar(puntaje)) {
 			eliminado = "Desafío " + puntaje + " eliminado";
+			// Update log
+			SistemaJuego.logUpdate("Se elimina desafío " + puntaje, bw);
 		} else {
 			eliminado = "El puntaje no corresponde a un desafío cargado";
 		}
@@ -267,7 +300,7 @@ public class SistemaABM {
 	}
 
 	// Equipos
-	private static void menuEquipos(TablaHash equipos, ArbolAVL habitaciones) {
+	private static void menuEquipos(TablaHash equipos, ArbolAVL habitaciones, BufferedWriter bw) throws IOException {
 		int opcionCrear;
 
 		do {
@@ -277,10 +310,10 @@ public class SistemaABM {
 
 			switch (opcionCrear) {
 			case 1:
-				System.out.println(crearEquipo(equipos, habitaciones));
+				System.out.println(crearEquipo(equipos, habitaciones, bw));
 				break;
 			case 2:
-				System.out.println(eliminarEquipo(equipos));
+				System.out.println(eliminarEquipo(equipos, bw));
 				break;
 			case 3:
 				System.out.println(modificarEquipo(equipos, habitaciones));
@@ -295,7 +328,7 @@ public class SistemaABM {
 		} while (opcionCrear != 0);
 	}
 
-	private static String crearEquipo(TablaHash equipos, ArbolAVL habitaciones) {
+	private static String crearEquipo(TablaHash equipos, ArbolAVL habitaciones, BufferedWriter bw) throws IOException {
 		String exito;
 
 		if (!habitaciones.vacio()) {
@@ -329,7 +362,12 @@ public class SistemaABM {
 			// Crear y agregar
 			Equipo equipoNuevo = new Equipo(nombre, puntajeSalida, puntajeAcumulado, puntajeActual, habitacion);
 			equipos.insertar(nombre, equipoNuevo);
+			// Marcamos la habitación actual como visitada
+			equipoNuevo.getHabitacionesVisitadas().insertar(habitacion, 1);
 			exito = "Equipo creado:\n" + equipoNuevo.toString();
+
+			// Update log
+			SistemaJuego.logUpdate("Se crea equipo " + nombre, bw);
 		} else {
 			exito = "¡No hay ninguna habitación cargada!";
 		}
@@ -337,13 +375,16 @@ public class SistemaABM {
 		return exito;
 	}
 
-	private static String eliminarEquipo(TablaHash equipos) {
+	private static String eliminarEquipo(TablaHash equipos, BufferedWriter bw) throws IOException {
 		System.out.println("Ingrese el nombre del equipo:");
 		String nombre = SistemaJuego.pedirNombre();
 		String eliminado;
 
 		if (equipos.eliminar(nombre)) {
 			eliminado = "Equipo '" + nombre + "' eliminado";
+
+			// Update log
+			SistemaJuego.logUpdate("Se elimina equipo " + nombre, bw);
 		} else {
 			eliminado = "El nombre no corresponde a un equipo cargado";
 		}
@@ -382,6 +423,8 @@ public class SistemaABM {
 				Habitacion habitacion = (Habitacion) habitaciones.getObjeto(SistemaJuego.pedirCodigo());
 				if (habitacion != null) {
 					equipo.setHabitacion(habitacion);
+					// Marcamos la habitación actual como visitada
+					equipo.getHabitacionesVisitadas().insertar(habitacion, 1);
 				} else {
 					System.out.println("El código no corresponde a una habitación cargada");
 				}

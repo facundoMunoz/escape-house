@@ -1,3 +1,25 @@
-D;30;Acertijo;Lógico
+// Desafío Puntaje Nombre Tipo
+D;80;Encontrar Contraseña;Búsqueda
+D;65;Cuatro Reinas;Matemático
 D;50;Sudoku;Matemático
-D;65;Trabado;Ingenio
+// Rotación derecha en raíz
+D;95;Encuentra El Camino;Ingenio
+D;110;Código Secreto;Letras
+// Rotación izquierda en nodo
+D;70;Sopa De Letras;Letras
+// Rotación derecha-izquierda en raíz
+D;35;Torres De Hanoi;Ingenio
+D;90;Cubo Mágico;Matemático
+D;60;Encestar;Destreza
+D;55;Encontrar La Llave;Búsqueda
+// Rotación izquierda-derecha en nodo
+D;30;Acertijo;Lógico
+D;40;Cuadrado Mágico;Matemático
+D;45;Trabado;Ingenio
+D;75;Trabalenguas;Letras
+D;85;Encontrar Diferencias;Búsqueda
+D;100;Laberinto;Ingenio
+D;105;Liberarte De Esposas;Destreza
+D;115;Juego De Memoria;Lógico
+D;120;Mover Los Cerillos;Ingenio
+D;125;Ludo Matemático;Matemático

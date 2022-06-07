@@ -1,35 +1,62 @@
 
-Ingreso al sistema Escape House 24-01-2022 14:05:44
+Ingreso al sistema Escape House 21-05-2022 16:50:16
 Carga de habitaciones
-Se crea la habitación 1
-Se crea la habitación 2
-Se crea la habitación 3
-Se crea la habitación 4
+(Fallo carga) Habitación mal escrita
 Se crea la habitación 5
-Se crea la habitación 6
-Se crea la habitación 7
-Se crea la habitación 8
-Se crea la habitación 9
 Se crea la habitación 10
-Se crea la habitación 11
-Se crea la habitación 12
-Se crea la habitación 13
-Se crea la habitación 14
 Se crea la habitación 15
-Se crea la habitación 16
+(Fallo carga) Habitación mal escrita
+Se crea la habitación 3
+Se crea la habitación 1
+(Fallo carga) Habitación mal escrita
+Se crea la habitación 7
+(Fallo carga) Habitación mal escrita
+Se crea la habitación 4
+Se crea la habitación 13
 Se crea la habitación 17
+Se crea la habitación 14
+(Fallo carga) Habitación mal escrita
+Se crea la habitación 2
+Se crea la habitación 12
+Se crea la habitación 6
+Se crea la habitación 16
 Se crea la habitación 18
 Se crea la habitación 19
+Se crea la habitación 8
+Se crea la habitación 9
+Se crea la habitación 11
 Se crea la habitación 20
 Se crea la habitación 21
 Carga de desafíos
-Se crea el desafío 30
-Se crea el desafío 50
+(Fallo carga) Desafío mal escrito
+Se crea el desafío 80
 Se crea el desafío 65
+Se crea el desafío 50
+(Fallo carga) Desafío mal escrito
+Se crea el desafío 95
+Se crea el desafío 110
+(Fallo carga) Desafío mal escrito
+Se crea el desafío 70
+(Fallo carga) Desafío mal escrito
+Se crea el desafío 35
+Se crea el desafío 90
+Se crea el desafío 60
+Se crea el desafío 55
+(Fallo carga) Desafío mal escrito
 Carga de equipos
+(Fallo carga) Equipo mal escrito
 Se crea el equipo Los Valientes
 Se crea el equipo Los Locos Adams
+Se crea el equipo Pinks
+Se crea el equipo Los Perdidos
+Se crea el equipo Las Neo
+Se crea el equipo Los Olímpicos
+Se crea el equipo Golden Warriors
+Se crea el equipo Los Informáticos
+Se crea el equipo Las Leonas
+(Fallo carga) Equipo mal escrito
 Carga del mapa
+(Fallo carga) Puerta mal escrita
 Se crea la puerta de 1 a 2
 Se crea la puerta de 1 a 4
 Se crea la puerta de 1 a 8
@@ -40,6 +67,7 @@ Se crea la puerta de 2 a 3
 Se crea la puerta de 2 a 12
 Se crea la puerta de 5 a 6
 Se crea la puerta de 5 a 8
+Se crea la puerta de 5 a 9
 Se crea la puerta de 8 a 13
 Se crea la puerta de 8 a 9
 Se crea la puerta de 9 a 11
@@ -51,4 +79,3 @@ Se crea la puerta de 17 a 18
 Se crea la puerta de 17 a 20
 Se crea la puerta de 17 a 19
 Se crea la puerta de 19 a 21
-Salida del sistema Escape House 24-01-2022 14:08:23

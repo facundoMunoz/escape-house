@@ -51,13 +51,13 @@ public class SistemaEquipos {
 	private static String mostrarEquipo(TablaHash equipos) {
 		System.out.println("Ingrese el nombre del equipo:");
 		String nombre = SistemaJuego.pedirNombre();
-		String habitacion = "El código no corresponde a un equipo cargado";
+		String equipo = "El nombre no corresponde a un equipo cargado";
 
 		if (equipos.pertenece(nombre)) {
-			habitacion = equipos.getObjeto(nombre).toString();
+			equipo = ((Equipo) equipos.getObjeto(nombre)).fullString();
 		}
 
-		return habitacion;
+		return equipo;
 	}
 
 	private static String posiblesDesafios(TablaHash equipos, ArbolAVL habitaciones, Grafo mapa, ArbolAVL desafios) {
@@ -86,9 +86,9 @@ public class SistemaEquipos {
 					Desafio desafioActual = (Desafio) listaDesafios.recuperar(posicion);
 
 					if (!desafiosJugados.pertenece(desafioActual.getPuntaje())
-							&& (int) desafioActual.getPuntaje() + puntajeActualEquipo >= puntajeMinimo) {
+							&& desafioActual.getPuntaje() + puntajeActualEquipo >= puntajeMinimo) {
 						// El desafío no debe estar completado y el puntaje debe alcanzar
-						desafiosPosibles += desafioActual.toString() + "\n\n";
+						desafiosPosibles += desafioActual.getPuntaje() + " - " + desafioActual.getNombre() + "\n";
 					}
 				}
 
@@ -150,11 +150,21 @@ public class SistemaEquipos {
 
 		if (equipo != null && habitacionLlegada != null) {
 			if (mapa.existeArco(equipo.getHabitacion(), habitacionLlegada)) {
-				if (equipo.getPuntajeActual() >= (int) mapa.etiquetaArco(equipo.getHabitacion(), habitacionLlegada)) {
-					// Si es adyacente y el puntaje actual alcanza el equipo cambia de habitación
-					// reiniciando el puntaje actual
+				Lista visitadas = equipo.getHabitacionesVisitadas();
+				int puntajeRequerido = (int) mapa.etiquetaArco(equipo.getHabitacion(), habitacionLlegada);
+
+				if (visitadas.localizar(habitacionLlegada) != -1) {
+					// Si el equipo ya visitó la habitación no necesita volver a gastar puntos
 					equipo.setHabitacion(habitacionLlegada);
-					equipo.setPuntajeActual(0);
+					puede = "Equipo '" + equipo.getNombre() + "' regresa a la habitación:\n"
+							+ habitacionLlegada.getCodigo() + " - " + habitacionLlegada.getNombre();
+				} else if (equipo.getPuntajeActual() >= puntajeRequerido) {
+					// Si es adyacente y el puntaje actual alcanza el equipo cambia de habitación
+					// modificando el puntaje actual
+					equipo.setHabitacion(habitacionLlegada);
+					equipo.setPuntajeActual(equipo.getPuntajeActual() - puntajeRequerido);
+					// Agregamos la habitación a las visitadas
+					visitadas.insertar(habitacionLlegada, visitadas.longitud() + 1);
 					puede = "Equipo '" + equipo.getNombre() + "' se mueve a la habitación:\n"
 							+ habitacionLlegada.getCodigo() + " - " + habitacionLlegada.getNombre();
 				} else {

@@ -1,6 +1,7 @@
 package objetos;
 
 import estructuras.TablaHash;
+import estructuras.Lista;
 
 public class Equipo {
 
@@ -11,6 +12,7 @@ public class Equipo {
 	private int puntajeActual;
 	private Habitacion habitacion;
 	private TablaHash desafiosResueltos;
+	private Lista habitacionesVisitadas;
 
 	// Constructores
 	public Equipo(String nombre, int puntajeSalida, int puntajeAcumulado, int puntajeActual, Habitacion habitacion) {
@@ -20,6 +22,7 @@ public class Equipo {
 		this.puntajeActual = puntajeActual;
 		this.habitacion = habitacion;
 		this.desafiosResueltos = new TablaHash();
+		this.habitacionesVisitadas = new Lista();
 	}
 
 	// Observadores
@@ -46,6 +49,10 @@ public class Equipo {
 	public TablaHash getDesafiosResueltos() {
 		return this.desafiosResueltos;
 	}
+	
+	public Lista getHabitacionesVisitadas() {
+		return this.habitacionesVisitadas;
+	}
 
 	// Modificadores
 	public void setPuntajeSalida(int puntajeSalida) {
@@ -67,9 +74,15 @@ public class Equipo {
 	// Propias del tipo
 	@Override
 	public String toString() {
-		return "Nombre: " + this.nombre + "\nPuntaje para salir: " + this.puntajeSalida + "\nPuntaje total acumulado: "
-				+ this.puntajeAcumulado + "\nPuntaje en habitación actual: " + this.puntajeActual
-				+ "\nHabitación actual: " + this.habitacion.getCodigo() + " - " + this.habitacion.getNombre();
+		return "" + this.nombre;
+	}
+	
+	public String fullString() {
+		return "Nombre: " + this.nombre +
+				"\nPuntaje para salir: " + this.puntajeSalida +
+				"\nPuntaje total: " + this.puntajeAcumulado +
+				"\nPuntaje actual: " + this.puntajeActual + 
+				"\nHabitación actual: " + this.habitacion.getCodigo();
 	}
 
 }

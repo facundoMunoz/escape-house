@@ -63,9 +63,12 @@ public class Habitacion {
 	// Propias de tipo
 	@Override
 	public String toString() {
-		return "Codigo: " + this.codigo + "\nNombre: " + this.nombre + "\nPlanta: " + this.planta
-				+ "\nMetros cuadrados: " + this.metrosCuadrados + "\nTiene salida al exterior: " + this.salidaExterior;
+		return "" + this.codigo;
+	}
 
+	public String fullString() {
+		return "Código: " + this.codigo + "\nNombre: " + this.nombre + "\nPlanta: " + this.planta
+				+ "\nMetros cuadrados: " + this.metrosCuadrados + "\nTiene salida exterior: " + this.salidaExterior;
 	}
 
 }

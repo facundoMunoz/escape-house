@@ -59,7 +59,7 @@ public class SistemaJuego {
 			opcionMenu = pedirCodigo();
 			switch (opcionMenu) {
 			case 1:
-				SistemaABM.menuABM(habitaciones, mapa, desafios, equipos);
+				SistemaABM.menuABM(habitaciones, mapa, desafios, equipos, log);
 				break;
 			case 2:
 				SistemaHabitaciones.menuHabitaciones(habitaciones, mapa);
@@ -89,7 +89,7 @@ public class SistemaJuego {
 
 	}
 
-	private static void logUpdate(String texto, BufferedWriter bw) throws IOException {
+	public static void logUpdate(String texto, BufferedWriter bw) throws IOException {
 		// Actualizar el archivo log
 		bw.newLine();
 		bw.append(texto);
@@ -212,6 +212,8 @@ public class SistemaJuego {
 					if (equipos.insertar(nombre, equipo)) {
 						// Si no está repetido se inserta con éxito
 						logUpdate("Se crea el equipo " + nombre, log);
+						// Marcamos la habitación actual como visitada
+						equipo.getHabitacionesVisitadas().insertar(habitacionActual, 1);
 					} else {
 						logUpdate("(Fallo carga) Equipo repetido " + nombre, log);
 					}
@@ -281,7 +283,7 @@ public class SistemaJuego {
 		int opcionMenu;
 
 		do {
-			System.out.println("Ingrese una opción:");
+			System.out.println("\nIngrese una opción:");
 			System.out.println("1. Ver árbol AVL de habitaciones\n" + "2. Ver árbol AVL de desafíos\n"
 					+ "3. Ver Tabla Hash de equipos\n" + "4. Ver Grafo del mapa\n" + "0. Volver");
 			opcionMenu = pedirCodigo();

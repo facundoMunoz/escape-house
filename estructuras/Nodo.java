@@ -2,41 +2,41 @@ package estructuras;
 
 public class Nodo {
 
-    private Object elemento;
-    private Nodo enlace;
+	private Object elemento;
+	private Nodo enlace;
 
-    // Constructor
-    public Nodo(Object tipoElemento, Nodo enlace) {
-        
-        this.elemento = tipoElemento;
-        this.enlace = enlace;
-        
-    }
-    
-    // Observadores
-    public Object getElemento() {
+	// Constructor
+	public Nodo(Object tipoElemento, Nodo enlace) {
 
-        return this.elemento;
+		this.elemento = tipoElemento;
+		this.enlace = enlace;
 
-    }
+	}
 
-    public Nodo getEnlace() {
+	// Observadores
+	public Object getElemento() {
 
-        return this.enlace;
+		return this.elemento;
 
-    }
+	}
 
-    // Modificadores
-    public void setElemento(Object nuevoElemento) {
+	public Nodo getEnlace() {
 
-        this.elemento = nuevoElemento;
+		return this.enlace;
 
-    }
+	}
 
-    public void setEnlace(Nodo nuevoEnlace) {
+	// Modificadores
+	public void setElemento(Object nuevoElemento) {
 
-        this.enlace = nuevoEnlace;
+		this.elemento = nuevoElemento;
 
-    }
+	}
+
+	public void setEnlace(Nodo nuevoEnlace) {
+
+		this.enlace = nuevoEnlace;
+
+	}
 
 }

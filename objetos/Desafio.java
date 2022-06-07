@@ -39,6 +39,10 @@ public class Desafio {
 	// Propias del tipo
 	@Override
 	public String toString() {
+		return "" + this.puntaje;
+	}
+	
+	public String fullString() {
 		return "Nombre: " + this.nombre +
 				"\nPuntaje: " + this.puntaje +
 				"\nTipo: " + this.tipo;

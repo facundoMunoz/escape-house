@@ -52,7 +52,7 @@ public class SistemaHabitaciones {
 		String habitacion = "El código no corresponde a una habitación cargada";
 
 		if (habitaciones.pertenece(codigo)) {
-			habitacion = habitaciones.getObjeto(codigo).toString();
+			habitacion = ((Habitacion) habitaciones.getObjeto(codigo)).fullString();
 		}
 
 		return habitacion;
@@ -79,7 +79,7 @@ public class SistemaHabitaciones {
 				contiguas += habitacionActual.getCodigo() + " - " + habitacionActual.getNombre() + " | ";
 				// Cargamos el puntaje necesario
 				posicion++;
-				contiguas += adyacentesYEtiquetas.recuperar(posicion) + "p\n";
+				contiguas += adyacentesYEtiquetas.recuperar(posicion) + " puntos\n";
 				posicion++;
 			}
 		} else if (habitacion != null) {
@@ -105,7 +105,7 @@ public class SistemaHabitaciones {
 		String esPosible;
 
 		if (habitacionOrigen != null && habitacionDestino != null) {
-			if (mapa.existeCaminoPuntajeMaximo(habitacionOrigen, habitacionDestino, puntajeMaximo)) {
+			if (mapa.existeCaminoPesoMaximo(habitacionOrigen, habitacionDestino, puntajeMaximo)) {
 				esPosible = "Es posible llegar de " + habitacionOrigen.getNombre() + " a "
 						+ habitacionDestino.getNombre() + " con " + puntajeMaximo + " puntos";
 			} else {
@@ -130,14 +130,14 @@ public class SistemaHabitaciones {
 		Habitacion habitacionDestino = (Habitacion) habitaciones.getObjeto(codigoDestino);
 
 		String salida = "No existe un camino";
-		Lista listaYPuntaje = mapa.minimoPuntajeParaPasar(habitacionOrigen, habitacionDestino);
+		Lista listaYPuntaje = mapa.minimoPesoParaPasar(habitacionOrigen, habitacionDestino);
 		int longitudLista = listaYPuntaje.longitud();
 
 		if (longitudLista != 0) {
-			salida = "Camino:\n";
+			salida = "Camino de menos puntaje:\n";
 
 			for (int posicion = 1; posicion < longitudLista; posicion++) {
-				salida += ((Habitacion) listaYPuntaje.recuperar(posicion)).getNombre() + " -> ";
+				salida += ((Habitacion) listaYPuntaje.recuperar(posicion)).getCodigo() + " -> ";
 			}
 			// El elemento final se cargar a parte porque es el puntaje
 			salida += "Puntaje necesario: " + listaYPuntaje.recuperar(longitudLista);
@@ -151,15 +151,15 @@ public class SistemaHabitaciones {
 
 	private static String sinPasarPor(ArbolAVL habitaciones, Grafo mapa) {
 		// Cargar habitación origen
-		System.out.println("Ingrese la habitación origen:");
+		System.out.println("Ingrese el código de la habitación origen:");
 		int codigoOrigen = SistemaJuego.pedirCodigo();
 		Habitacion habitacionOrigen = (Habitacion) habitaciones.getObjeto(codigoOrigen);
 		// Cargar habitación destino
-		System.out.println("Ingrese la habitación destino:");
+		System.out.println("Ingrese el código de la habitación destino:");
 		int codigoDestino = SistemaJuego.pedirCodigo();
 		Habitacion habitacionDestino = (Habitacion) habitaciones.getObjeto(codigoDestino);
 		// Cargar habitación evitada
-		System.out.println("Ingrese la habitación evitada:");
+		System.out.println("Ingrese el código de la habitación evitada:");
 		int codigoEvitada = SistemaJuego.pedirCodigo();
 		Habitacion habitacionEvitada = (Habitacion) habitaciones.getObjeto(codigoEvitada);
 		// Cargar puntaje máximo
@@ -167,26 +167,31 @@ public class SistemaHabitaciones {
 		int puntajeMaximo = SistemaJuego.pedirCodigo();
 
 		String salida;
-		Lista posiblesCaminos = mapa.puntajeMaxSinPasarPor(habitacionOrigen, habitacionDestino, habitacionEvitada,
+		Lista posiblesCaminos = mapa.pesoMaxSinPasarPor(habitacionOrigen, habitacionDestino, habitacionEvitada,
 				puntajeMaximo);
 		int longitudLista = posiblesCaminos.longitud();
 
 		if (longitudLista != 0) {
-			salida = "Caminos posibles:\n";
+			salida = "Caminos posibles sin superar " + puntajeMaximo + " puntos:\n";
 			Lista caminoActual;
+			int longitudCamino;
 
 			for (int posicionLista = 1; posicionLista <= longitudLista; posicionLista++) {
 				// Recorremos la lista de caminos
 				caminoActual = (Lista) posiblesCaminos.recuperar(posicionLista);
+				longitudCamino = caminoActual.longitud();
+				salida += posicionLista + ") ";
 
-				for (int posicionCamino = 1; posicionCamino < longitudLista; posicionCamino++) {
+				for (int posicionCamino = 1; posicionCamino < longitudCamino; posicionCamino++) {
 					// Listamos las habitaciones del camino
-					salida += ((Habitacion) caminoActual.recuperar(posicionCamino)).getNombre() + " -> ";
+					salida += ((Habitacion) caminoActual.recuperar(posicionCamino)).getCodigo() + " -> ";
 				}
+				// El último se pone a parte para que no quede una flecha extra
+				salida += ((Habitacion) caminoActual.recuperar(longitudCamino)).getNombre();
 
 				salida += "\n";
 			}
-		} else if (habitacionOrigen != null && habitacionDestino != null) {
+		} else if (habitacionOrigen == null || habitacionDestino == null) {
 			salida = "Alguna o ambas habitaciones no existen";
 		} else {
 			salida = "No existe un camino";

@@ -107,7 +107,7 @@ public class SistemaABM {
 		// Update log
 		SistemaJuego.logUpdate("Se crea habitación " + codigo, bw);
 
-		return "Habitación creada:\n" + habitacionNueva.toString();
+		return "Habitación creada:\n" + habitacionNueva.fullString();
 	}
 
 	private static String eliminarHabitacion(ArbolAVL habitaciones, Grafo mapa, TablaHash equipos, BufferedWriter bw)
@@ -185,7 +185,7 @@ public class SistemaABM {
 				System.out.println("Opción no contemplada");
 				break;
 			}
-			cambios = "La habitación queda como:\n" + habitacion.toString();
+			cambios = "La habitación queda como:\n" + habitacion.fullString();
 		} else {
 			cambios = "El código no corresponde a una habitación cargada";
 		}
@@ -245,7 +245,7 @@ public class SistemaABM {
 		// Update log
 		SistemaJuego.logUpdate("Se crea desafío " + puntaje, bw);
 
-		return "Desafío creado:\n" + desafioNuevo.toString();
+		return "Desafío creado:\n" + desafioNuevo.fullString();
 	}
 
 	private static String eliminarDesafio(ArbolAVL desafios, BufferedWriter bw) throws IOException {
@@ -291,7 +291,7 @@ public class SistemaABM {
 				System.out.println("Opción no contemplada");
 				break;
 			}
-			cambios = "El desafío queda como:\n" + desafio.toString();
+			cambios = "El desafío queda como:\n" + desafio.fullString();
 		} else {
 			cambios = "El puntaje no corresponde a un desafío cargado";
 		}
@@ -364,7 +364,7 @@ public class SistemaABM {
 			equipos.insertar(nombre, equipoNuevo);
 			// Marcamos la habitación actual como visitada
 			equipoNuevo.getHabitacionesVisitadas().insertar(habitacion, 1);
-			exito = "Equipo creado:\n" + equipoNuevo.toString();
+			exito = "Equipo creado:\n" + equipoNuevo.fullString();
 
 			// Update log
 			SistemaJuego.logUpdate("Se crea equipo " + nombre, bw);
@@ -435,7 +435,7 @@ public class SistemaABM {
 				System.out.println("Opción no contemplada");
 				break;
 			}
-			cambios = "El equipo queda como:\n" + equipo.toString();
+			cambios = "El equipo queda como:\n" + equipo.fullString();
 		} else {
 			cambios = "El nombre no corresponde a un equipo cargado";
 		}

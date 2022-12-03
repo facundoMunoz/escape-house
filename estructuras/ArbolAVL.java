@@ -156,7 +156,7 @@ public class ArbolAVL {
 			hijo.setClave(nuevoNodo.getClave());
 			hijo.setObjeto(nuevoNodo.getObjeto());
 			// Eliminamos al candidato
-			eliminarAux(padreNuevoNodo, nuevoNodo, nuevoNodo.getClave());
+			eliminarAux(hijo, hijo.getDerecho(), nuevoNodo.getClave());
 		} else {
 			hijo.setClave(padreNuevoNodo.getClave());
 			hijo.setObjeto(padreNuevoNodo.getObjeto());
@@ -193,7 +193,13 @@ public class ArbolAVL {
 				retorno = rotarIzquierda(nodo);
 			}
 			if (padre != null) {
-				padre.setDerecho(retorno);
+				if (padre.getDerecho().equals(nodo)) {
+					// Si era el derecho asignamos ese
+					padre.setDerecho(retorno);
+				} else {
+					// Sino el izquierdo
+					padre.setIzquierdo(retorno);
+				}
 			}
 		} else if (this.balance(nodo) > 1) {
 			// Está desbalanceado hacia la izquierda
@@ -206,7 +212,13 @@ public class ArbolAVL {
 				retorno = rotarDerecha(nodo);
 			}
 			if (padre != null) {
-				padre.setIzquierdo(retorno);
+				if (padre.getDerecho().equals(nodo)) {
+					// Si era el derecho asignamos ese
+					padre.setDerecho(retorno);
+				} else {
+					// Sino el izquierdo
+					padre.setIzquierdo(retorno);
+				}
 			}
 		}
 		nodo.recalcularAltura();
@@ -223,6 +235,9 @@ public class ArbolAVL {
 		NodoAVL temp = hijoIzq.getDerecho();
 		hijoIzq.setDerecho(nodo);
 		nodo.setIzquierdo(temp);
+		// Recalculo sus alturas
+		nodo.recalcularAltura();
+		hijoIzq.recalcularAltura();
 
 		if (nodo == this.raiz) {
 			this.raiz = hijoIzq;
@@ -236,6 +251,9 @@ public class ArbolAVL {
 		NodoAVL temp = hijoDer.getIzquierdo();
 		hijoDer.setIzquierdo(nodo);
 		nodo.setDerecho(temp);
+		// Recalculo sus alturas
+		nodo.recalcularAltura();
+		hijoDer.recalcularAltura();
 
 		if (nodo == this.raiz) {
 			this.raiz = hijoDer;
@@ -380,30 +398,31 @@ public class ArbolAVL {
 	}
 
 	private String stringAux(NodoAVL nodo, String cadena) {
-		String cadena2 = cadena;
+		cadena += "Nodo: " + nodo.getObjeto().toString();
 
-		cadena2 += "Nodo: " + nodo.getObjeto().toString();
 		if (nodo.getIzquierdo() != null) {
-			cadena2 += " | HI: " + nodo.getIzquierdo().getObjeto().toString();
+			cadena += " | HI: " + nodo.getIzquierdo().getObjeto().toString();
 		} else {
-			cadena2 += " | HI: -";
+			cadena += " | HI: -";
 		}
 
 		if (nodo.getDerecho() != null) {
-			cadena2 += " | HD: " + nodo.getDerecho().getObjeto().toString() + "\n";
+			cadena += " | HD: " + nodo.getDerecho().getObjeto().toString() + "";
 		} else {
-			cadena2 += " | HD: -\n";
+			cadena += " | HD: -";
 		}
 
+		cadena += " | Altura : " + nodo.getAltura() + "\n";
+
 		if (nodo.getIzquierdo() != null) {
-			cadena2 = stringAux(nodo.getIzquierdo(), cadena2);
+			cadena = stringAux(nodo.getIzquierdo(), cadena);
 		}
 
 		if (nodo.getDerecho() != null) {
-			cadena2 = stringAux(nodo.getDerecho(), cadena2);
+			cadena = stringAux(nodo.getDerecho(), cadena);
 		}
 
-		return cadena2;
+		return cadena;
 	}
 
 }

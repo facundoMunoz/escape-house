@@ -1,7 +1,7 @@
 package estructuras;
 
 public class Grafo {
-	// Grafo etiquetado con int
+	// Grafo no dirigido etiquetado con int
 	private NodoVert inicio;
 
 	public Grafo() {
@@ -35,7 +35,25 @@ public class Grafo {
 	public boolean eliminarVertice(Object buscado) {
 		boolean exito = false;
 		// Buscamos el origen
-		NodoVert nodo = this.ubicarVertice(buscado);
+		NodoVert nodo = null;
+
+		if (buscado == this.inicio.getElem()) {
+			nodo = this.inicio;
+			// Si el nodo es el inicio reemplazamos
+			this.inicio = nodo.getSigVertice();
+		} else {
+			// Si no buscamos el anterior para reemplazar sabiendo que pertenece a la lista
+			NodoVert anterior = this.inicio;
+			while (anterior.getSigVertice() != null && !buscado.equals(anterior.getSigVertice().getElem())) {
+				anterior = anterior.getSigVertice();
+			}
+
+			if (anterior != null) {
+				nodo = anterior.getSigVertice();
+				// Unimos el anterior con el siguiente del nodo
+				anterior.setSigVertice(nodo.getSigVertice());
+			}
+		}
 
 		if (nodo != null) {
 			NodoAdy nodoAdyacente = nodo.getPrimerAdy();
@@ -46,19 +64,6 @@ public class Grafo {
 				nodoAdyacente = nodoAdyacente.getSigAdyacente();
 			}
 			nodo.setPrimerAdy(null);
-
-			if (nodo == this.inicio) {
-				// Si el nodo es el inicio reemplazamos
-				this.inicio = nodo.getSigVertice();
-			} else {
-				// Si no buscamos el anterior para reemplazar sabiendo que pertenece a la lista
-				NodoVert anterior = this.inicio;
-				while (!buscado.equals(anterior.getSigVertice().getElem())) {
-					anterior = anterior.getSigVertice();
-				}
-				// Anidamos el anterior con el siguiente del nodo
-				anterior.setSigVertice(nodo.getSigVertice());
-			}
 
 			exito = true;
 		}
@@ -472,6 +477,7 @@ public class Grafo {
 		// Retorna el camino y mínimo peso para ir de origen a destino en una lista
 		// O null si no lo encuentra
 		Lista caminoMenosPeso = new Lista();
+		int[] menorPeso = new int[1];
 		// Verifica si ambos vertices existen
 		NodoVert auxO = null;
 		NodoVert auxD = null;
@@ -490,32 +496,29 @@ public class Grafo {
 		if (auxO != null && auxD != null) {
 			// Si existen buscamos un camino entre ambos
 			Lista caminoActual = new Lista();
-			caminoMenosPeso = minimoPesoParaPasarAux(auxO, auxD, 0, caminoActual, caminoMenosPeso);
+			caminoMenosPeso = minimoPesoParaPasarAux(auxO, auxD, menorPeso, 0, caminoActual, caminoMenosPeso);
 		}
 
 		return caminoMenosPeso;
 	}
 
-	private Lista minimoPesoParaPasarAux(NodoVert actual, NodoVert dest, int pesoActual, Lista caminoActual,
-			Lista caminoMenosPeso) {
+	private Lista minimoPesoParaPasarAux(NodoVert actual, NodoVert dest, int[] menorPeso, int pesoActual,
+			Lista caminoActual, Lista caminoMenosPeso) {
 		// Precondición: pesoActual comienza en 0
 		if (actual != null) {
 			caminoActual.insertar(actual.getElem(), caminoActual.longitud() + 1);
 
-			// Camino encontrado
 			if (actual.equals(dest)) {
-				// Agregamos el peso a la lista
-				caminoActual.insertar(pesoActual, caminoActual.longitud() + 1);
-				// Si la lista del posible camino es vacía o requiere más peso se reemplaza
-				// por la actual
-				if (caminoMenosPeso.esVacia()
-						|| (int) caminoActual.recuperar(caminoActual.longitud()) < (int) caminoMenosPeso
-								.recuperar(caminoMenosPeso.longitud())) {
-					System.out.println("Cambia camino");
+				// Camino encontrado
+				if (caminoMenosPeso.esVacia() || menorPeso[0] > pesoActual) {
+					// Agregamos el peso a la lista para clonar
+					caminoActual.insertar(pesoActual, caminoActual.longitud() + 1);
+					// Actualizamos
+					menorPeso[0] = pesoActual;
 					caminoMenosPeso = caminoActual.clone();
+					// Quitamos el peso del camino
+					caminoActual.eliminar(caminoActual.longitud());
 				}
-				// Quitamos el peso del camino
-				caminoActual.eliminar(caminoActual.longitud());
 			} else {
 				// Si no es el destino verifica entre actual y el destino
 				NodoAdy ady = actual.getPrimerAdy();
@@ -525,11 +528,12 @@ public class Grafo {
 						// Sumamos el peso del arco para luego comparar
 						pesoActual += ady.getEtiqueta();
 
-						caminoMenosPeso = minimoPesoParaPasarAux(ady.getVertice(), dest, pesoActual, caminoActual,
-								caminoMenosPeso);
-
-						// Quitamos el adyacente del recorrido del camino actual
-						caminoActual.eliminar(caminoActual.longitud());
+						if (menorPeso[0] == 0 || menorPeso[0] > pesoActual) {
+							caminoMenosPeso = minimoPesoParaPasarAux(ady.getVertice(), dest, menorPeso, pesoActual,
+									caminoActual, caminoMenosPeso);
+							// Quitamos el adyacente del recorrido del camino actual
+							caminoActual.eliminar(caminoActual.longitud());
+						}
 						pesoActual -= ady.getEtiqueta();
 					}
 					ady = ady.getSigAdyacente();

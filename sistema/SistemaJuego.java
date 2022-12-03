@@ -53,6 +53,8 @@ public class SistemaJuego {
 
 		int opcionMenu;
 
+		System.out.println(mapa.caminoMasCorto(6, 7));
+
 		do {
 			System.out.println("Ingrese una opción:");
 			System.out.println(opcionesMenu());

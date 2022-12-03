@@ -8,4 +8,4 @@ E;Los Olímpicos;400;0;16;0
 E;Golden Warriors;600;0;5;0
 E;Los Informáticos;700;0;13;0
 E;Las Leonas;400;0;2;0
-E;
+E;Samuráis;500;90;12;4

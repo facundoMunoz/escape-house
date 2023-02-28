@@ -28,10 +28,13 @@ public class SistemaJuego {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		// Log
-		String ruta = System.getProperty("user.dir") + "\\src\\log.txt";
-		File salida = new File(ruta);
-		FileWriter archivoSalida = new FileWriter(salida);
-		BufferedWriter log = new BufferedWriter(archivoSalida);
+		File archivoLog = new File(System.getProperty("user.dir"), "log.txt");
+		try {
+			archivoLog.createNewFile();
+		} catch (IOException e) {
+		}
+		FileWriter logEditable = new FileWriter(archivoLog);
+		BufferedWriter log = new BufferedWriter(logEditable);
 
 		// Obtenemos la fecha de acceso para log
 		Date fecha = new Date();
@@ -52,8 +55,6 @@ public class SistemaJuego {
 		cargarPuertasMapa(mapa, habitaciones, log);
 
 		int opcionMenu;
-
-		System.out.println(mapa.caminoMasCorto(6, 7));
 
 		do {
 			System.out.println("Ingrese una opción:");
@@ -102,11 +103,8 @@ public class SistemaJuego {
 	private static void cargarHabitaciones(Grafo mapa, ArbolAVL habitaciones, BufferedWriter log)
 			throws FileNotFoundException, IOException {
 		// Obtener archivo
-		String ruta = System.getProperty("user.dir") + "\\src\\datos\\habitaciones.txt";
-		File archivoAux = new File(ruta);
-
-		FileReader archivo = new FileReader(archivoAux);
-		BufferedReader archivoHabitaciones = new BufferedReader(archivo);
+		InputStream input = SistemaJuego.class.getResourceAsStream("/habitaciones.txt");
+		BufferedReader archivoHabitaciones = new BufferedReader(new InputStreamReader(input));
 
 		// Cargar en log
 		logUpdate("Carga de habitaciones", log);
@@ -133,9 +131,6 @@ public class SistemaJuego {
 					logUpdate("(Fallo carga) Habitación repetida " + codigo, log);
 				}
 
-			} else {
-				// Datos mal cargados
-				logUpdate("(Fallo carga) Habitación mal escrita", log);
 			}
 		}
 
@@ -146,11 +141,8 @@ public class SistemaJuego {
 	private static void cargarDesafios(ArbolAVL desafios, BufferedWriter log)
 			throws FileNotFoundException, IOException {
 		// Obtener archivo
-		String ruta = System.getProperty("user.dir") + "\\src\\datos\\desafios.txt";
-		File archivoAux = new File(ruta);
-
-		FileReader archivo = new FileReader(archivoAux);
-		BufferedReader archivoDesafios = new BufferedReader(archivo);
+		InputStream input = SistemaJuego.class.getResourceAsStream("/desafios.txt");
+		BufferedReader archivoDesafios = new BufferedReader(new InputStreamReader(input));
 
 		// Cargar en log
 		logUpdate("Carga de desafíos", log);
@@ -172,9 +164,6 @@ public class SistemaJuego {
 				} else {
 					logUpdate("(Fallo carga) Desafío repetido " + puntaje, log);
 				}
-			} else {
-				// Datos mal cargados
-				logUpdate("(Fallo carga) Desafío mal escrito", log);
 			}
 		}
 
@@ -185,11 +174,8 @@ public class SistemaJuego {
 	private static void cargarEquipos(TablaHash equipos, ArbolAVL habitaciones, BufferedWriter log)
 			throws FileNotFoundException, IOException {
 		// Obtener archivo
-		String ruta = System.getProperty("user.dir") + "\\src\\datos\\equipos.txt";
-		File archivoAux = new File(ruta);
-
-		FileReader archivo = new FileReader(archivoAux);
-		BufferedReader archivoEquipos = new BufferedReader(archivo);
+		InputStream input = SistemaJuego.class.getResourceAsStream("/equipos.txt");
+		BufferedReader archivoEquipos = new BufferedReader(new InputStreamReader(input));
 
 		// Cargar en log
 		logUpdate("Carga de equipos", log);
@@ -223,9 +209,6 @@ public class SistemaJuego {
 					// Error en carga (no existe el equipo)
 					logUpdate("(Fallo carga) Habitación no existe para equipo " + nombre, log);
 				}
-			} else {
-				// Datos mal cargados
-				logUpdate("(Fallo carga) Equipo mal escrito", log);
 			}
 		}
 
@@ -236,17 +219,14 @@ public class SistemaJuego {
 	private static void cargarPuertasMapa(Grafo mapa, ArbolAVL habitaciones, BufferedWriter log)
 			throws FileNotFoundException, IOException {
 		// Obtener archivo
-		String ruta = System.getProperty("user.dir") + "\\src\\datos\\puertas.txt";
-		File archivoAux = new File(ruta);
-
-		FileReader archivo = new FileReader(archivoAux);
-		BufferedReader archivoDesafios = new BufferedReader(archivo);
+		InputStream input = SistemaJuego.class.getResourceAsStream("/puertas.txt");
+		BufferedReader archivoPuertas = new BufferedReader(new InputStreamReader(input));
 
 		// Cargar en log
 		logUpdate("Carga del mapa", log);
 
 		String linea;
-		while ((linea = archivoDesafios.readLine()) != null) { // Carga y comparación
+		while ((linea = archivoPuertas.readLine()) != null) { // Carga y comparación
 			StringTokenizer tokens = new StringTokenizer(linea, ";");
 
 			// Contamos que tengamos todos los elementos
@@ -271,13 +251,10 @@ public class SistemaJuego {
 					// Error en carga (no existe el equipo)
 					logUpdate("(Fallo carga) Habitación no existe para puerta", log);
 				}
-			} else {
-				// Datos mal cargados
-				logUpdate("(Fallo carga) Puerta mal escrita", log);
 			}
 		}
 
-		archivoDesafios.close();
+		archivoPuertas.close();
 	}
 
 	// Consulta general

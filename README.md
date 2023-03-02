@@ -9,18 +9,6 @@ Java based console app to manage an 'Escape House' game rooms, teams and challen
 
 </div>
 
-<!-- CONTENTS -->
-<details> <summary> Table of Contents </summary>
-
-- [Built With](#built-with)
-- [Getting Started](#getting-started)
-   - [Prerequisites](#prerequisites)
-- [Usage](#usage)
-   - [Notes](#notes)
-- [Contact](#contact)
-
-</details>
-
 <!-- BUILT WITH -->
 ## Built With
 

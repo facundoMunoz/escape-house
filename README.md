@@ -26,7 +26,7 @@ Java based console app to manage an 'Escape House' game rooms, teams and challen
 <!-- USAGE -->
 ## Usage
 
-- Open cmd in the directory where the jar was downloaded and use the following command:
+- Open a Terminal/CMD in the directory where the jar was downloaded and use the following command:
 ```
 java -jar [latest-version].jar
 ```
